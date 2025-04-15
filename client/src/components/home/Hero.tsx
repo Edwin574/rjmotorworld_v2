@@ -1,4 +1,3 @@
-
 import { Link } from "wouter";
 import { CURRENCY } from "@/lib/constants";
 import SearchBar from "./SearchBar";
@@ -7,12 +6,13 @@ const Hero = () => {
   return (
     <section className="relative h-[80vh]">
       {/* Background Image */}
-      <div 
+      <div
         className="absolute inset-0 z-0"
         style={{
-          backgroundImage: "url('https://images.unsplash.com/photo-1604055203007-b6b934c925ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
+          backgroundImage:
+            "url('https://images.unsplash.com/photo-1617814065893-00757125efab?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
         }}
       >
         <div className="absolute inset-0 bg-black/50" /> {/* Overlay */}
@@ -25,9 +25,10 @@ const Hero = () => {
               Discover Your Dream Car
             </h1>
             <p className="text-lg md:text-xl mb-8 text-gray-200 max-w-2xl">
-              Nairobi's premium car dealership with the finest selection of vehicles at competitive prices.
+              Kenya's premium car dealership with the finest selection of
+              vehicles at competitive prices.
             </p>
-            
+
             {/* Search Bar */}
             <div className="w-full max-w-4xl mb-8">
               <SearchBar />
