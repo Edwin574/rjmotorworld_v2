@@ -1,0 +1,48 @@
+import { useQuery } from "@tanstack/react-query";
+import { Link } from "wouter";
+import type { CarBrand } from "@shared/schema";
+
+const BrandLogos = () => {
+  // Fetch car brands from API
+  const { data: brands = [], isLoading } = useQuery<CarBrand[]>({
+    queryKey: ['/api/brands'],
+  });
+
+  if (isLoading) {
+    return (
+      <section className="py-10 bg-white">
+        <div className="container mx-auto px-4">
+          <h2 className="text-2xl font-bold text-center mb-8">Popular Brands</h2>
+          <div className="flex justify-center">
+            <div className="animate-pulse flex space-x-12">
+              {[...Array(7)].map((_, index) => (
+                <div key={index} className="w-24 h-24 bg-gray-200 rounded-full"></div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="py-10 bg-white">
+      <div className="container mx-auto px-4">
+        <h2 className="text-2xl font-bold text-center mb-8">Popular Brands</h2>
+        <div className="overflow-hidden relative">
+          <div className="flex flex-wrap justify-center gap-8 md:gap-12">
+            {brands.map((brand) => (
+              <Link key={brand.id} href={`/cars?make=${encodeURIComponent(brand.name)}`}>
+                <a className="flex items-center justify-center w-24 h-24 grayscale hover:grayscale-0 transition">
+                  <img src={brand.logoUrl} alt={brand.name} className="h-16" />
+                </a>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default BrandLogos;

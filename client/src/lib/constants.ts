@@ -1,0 +1,106 @@
+// Car brands with logo URLs
+export const CAR_BRANDS = [
+  { id: 1, name: "BMW", logoUrl: "https://www.carlogos.org/car-logos/bmw-logo.png" },
+  { id: 2, name: "Mercedes-Benz", logoUrl: "https://www.carlogos.org/car-logos/mercedes-benz-logo.png" },
+  { id: 3, name: "Toyota", logoUrl: "https://www.carlogos.org/car-logos/toyota-logo.png" },
+  { id: 4, name: "Audi", logoUrl: "https://www.carlogos.org/car-logos/audi-logo.png" },
+  { id: 5, name: "Honda", logoUrl: "https://www.carlogos.org/car-logos/honda-logo.png" },
+  { id: 6, name: "Ford", logoUrl: "https://www.carlogos.org/car-logos/ford-logo.png" },
+  { id: 7, name: "Volkswagen", logoUrl: "https://www.carlogos.org/car-logos/volkswagen-logo.png" }
+];
+
+// Price ranges for filtering
+export const PRICE_RANGES = [
+  { min: undefined, max: 10000, label: "Under $10,000" },
+  { min: 10000, max: 20000, label: "$10,000 - $20,000" },
+  { min: 20000, max: 30000, label: "$20,000 - $30,000" },
+  { min: 30000, max: 40000, label: "$30,000 - $40,000" },
+  { min: 40000, max: 50000, label: "$40,000 - $50,000" },
+  { min: 50000, max: 75000, label: "$50,000 - $75,000" },
+  { min: 75000, max: 100000, label: "$75,000 - $100,000" },
+  { min: 100000, max: undefined, label: "Over $100,000" }
+];
+
+// Mileage ranges for filtering
+export const MILEAGE_RANGES = [
+  { min: undefined, max: 10000, label: "Under 10,000 miles" },
+  { min: 10000, max: 20000, label: "10,000 - 20,000 miles" },
+  { min: 20000, max: 30000, label: "20,000 - 30,000 miles" },
+  { min: 30000, max: 40000, label: "30,000 - 40,000 miles" },
+  { min: 40000, max: 50000, label: "40,000 - 50,000 miles" },
+  { min: 50000, max: 75000, label: "50,000 - 75,000 miles" },
+  { min: 75000, max: undefined, label: "Over 75,000 miles" }
+];
+
+// Year ranges for filtering
+export const YEARS = Array.from({ length: 15 }, (_, i) => new Date().getFullYear() - i);
+
+// Contact time options
+export const CONTACT_TIMES = [
+  { value: "morning", label: "Morning (9AM - 12PM)" },
+  { value: "afternoon", label: "Afternoon (12PM - 5PM)" },
+  { value: "evening", label: "Evening (5PM - 8PM)" }
+];
+
+// Contact method options
+export const CONTACT_METHODS = [
+  { value: "email", label: "Email" },
+  { value: "phone", label: "Phone" },
+  { value: "whatsapp", label: "WhatsApp" }
+];
+
+// Accident history options
+export const ACCIDENT_HISTORY = [
+  { value: "no_accidents", label: "No Accidents" },
+  { value: "minor_accidents", label: "Minor Accidents" },
+  { value: "major_accidents", label: "Major Accidents" }
+];
+
+// Seller type options
+export const SELLER_TYPES = [
+  { 
+    value: "individual", 
+    label: "Individual", 
+    icon: "user",
+    description: "I am a private car owner"
+  },
+  { 
+    value: "corporate", 
+    label: "Corporate", 
+    icon: "building",
+    description: "I represent a company"
+  },
+  { 
+    value: "showroom", 
+    label: "Showroom", 
+    icon: "store",
+    description: "I have a car dealership"
+  }
+];
+
+// Business hours
+export const BUSINESS_HOURS = {
+  weekdays: "Monday - Friday: 9:00 AM - 7:00 PM",
+  saturday: "Saturday: 10:00 AM - 6:00 PM",
+  sunday: "Sunday: Closed"
+};
+
+// Contact information
+export const CONTACT_INFO = {
+  address: "123 Dealership Ave, Cityname, State 12345",
+  phone: "(123) 456-7890",
+  email: "info@autoelite.com"
+};
+
+// Theme colors
+export const THEME_COLORS = {
+  primary: '#1a56db',
+  secondary: '#f97316',
+  dark: '#111827',
+  grayMedium: '#374151',
+  grayLight: '#9ca3af',
+  offWhite: '#f3f4f6',
+  success: '#10b981',
+  error: '#ef4444',
+  warning: '#f59e0b'
+};
