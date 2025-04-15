@@ -10,13 +10,13 @@ const BrandLogos = () => {
 
   if (isLoading) {
     return (
-      <section className="py-10 bg-white">
+      <section className="py-10 bg-primary-white">
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-bold text-center mb-8">Popular Brands</h2>
+          <h2 className="text-2xl font-bold text-center mb-8 text-secondary-color">Popular Brands</h2>
           <div className="flex justify-center">
             <div className="animate-pulse flex space-x-12">
               {[...Array(7)].map((_, index) => (
-                <div key={index} className="w-24 h-24 bg-gray-200 rounded-full"></div>
+                <div key={index} className="w-24 h-24 bg-gray-three rounded-full"></div>
               ))}
             </div>
           </div>
@@ -26,16 +26,16 @@ const BrandLogos = () => {
   }
 
   return (
-    <section className="py-10 bg-white">
+    <section className="py-10 bg-primary-white">
       <div className="container mx-auto px-4">
-        <h2 className="text-2xl font-bold text-center mb-8">Popular Brands</h2>
+        <h2 className="text-2xl font-bold text-center mb-8 text-secondary-color">Popular Brands</h2>
         <div className="overflow-hidden relative">
           <div className="flex flex-wrap justify-center gap-8 md:gap-12">
             {brands.map((brand) => (
               <Link key={brand.id} href={`/cars?make=${encodeURIComponent(brand.name)}`}>
-                <a className="flex items-center justify-center w-24 h-24 grayscale hover:grayscale-0 transition">
+                <div className="flex items-center justify-center w-24 h-24 grayscale hover:grayscale-0 transition cursor-pointer">
                   <img src={brand.logoUrl} alt={brand.name} className="h-16" />
-                </a>
+                </div>
               </Link>
             ))}
           </div>

@@ -1,28 +1,29 @@
 import { Link } from "wouter";
-import { BUSINESS_HOURS, CONTACT_INFO } from "@/lib/constants";
+import { BUSINESS_HOURS, CONTACT_INFO, SOCIAL_MEDIA } from "@/lib/constants";
+import { Facebook, Twitter, Instagram, Youtube, MapPin, Phone, Mail, Send } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="bg-dark text-white pt-12 pb-8">
+    <footer className="bg-secondary-dark text-primary-white pt-12 pb-8">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           <div>
-            <h3 className="text-xl font-bold mb-4">AutoElite</h3>
-            <p className="text-gray-300 mb-4">
+            <h3 className="text-xl font-bold mb-4">RJ Motorworld</h3>
+            <p className="text-gray-three mb-4">
               Premium car dealership offering the finest selection of new and used vehicles. Experience excellence in automotive retail.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-300 hover:text-white">
-                <i className="fab fa-facebook-f"></i>
+              <a href={SOCIAL_MEDIA.facebook} className="text-gray-three hover:text-primary-accent">
+                <Facebook size={20} />
               </a>
-              <a href="#" className="text-gray-300 hover:text-white">
-                <i className="fab fa-twitter"></i>
+              <a href={SOCIAL_MEDIA.twitter} className="text-gray-three hover:text-primary-accent">
+                <Twitter size={20} />
               </a>
-              <a href="#" className="text-gray-300 hover:text-white">
-                <i className="fab fa-instagram"></i>
+              <a href={SOCIAL_MEDIA.instagram} className="text-gray-three hover:text-primary-accent">
+                <Instagram size={20} />
               </a>
-              <a href="#" className="text-gray-300 hover:text-white">
-                <i className="fab fa-youtube"></i>
+              <a href={SOCIAL_MEDIA.youtube} className="text-gray-three hover:text-primary-accent">
+                <Youtube size={20} />
               </a>
             </div>
           </div>
@@ -30,13 +31,41 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-bold mb-4">Quick Links</h3>
             <ul className="space-y-2">
-              <li><Link href="/"><a className="text-gray-300 hover:text-white">Home</a></Link></li>
-              <li><Link href="/cars"><a className="text-gray-300 hover:text-white">Cars</a></Link></li>
-              <li><Link href="/cars/new"><a className="text-gray-300 hover:text-white">New Cars</a></Link></li>
-              <li><Link href="/cars/used"><a className="text-gray-300 hover:text-white">Used Cars</a></Link></li>
-              <li><Link href="/sell"><a className="text-gray-300 hover:text-white">Sell Your Car</a></Link></li>
-              <li><Link href="/about"><a className="text-gray-300 hover:text-white">About Us</a></Link></li>
-              <li><Link href="/contact"><a className="text-gray-300 hover:text-white">Contact</a></Link></li>
+              <li>
+                <Link href="/">
+                  <div className="text-gray-three hover:text-primary-accent cursor-pointer">Home</div>
+                </Link>
+              </li>
+              <li>
+                <Link href="/cars">
+                  <div className="text-gray-three hover:text-primary-accent cursor-pointer">Cars</div>
+                </Link>
+              </li>
+              <li>
+                <Link href="/cars/new">
+                  <div className="text-gray-three hover:text-primary-accent cursor-pointer">New Cars</div>
+                </Link>
+              </li>
+              <li>
+                <Link href="/cars/used">
+                  <div className="text-gray-three hover:text-primary-accent cursor-pointer">Used Cars</div>
+                </Link>
+              </li>
+              <li>
+                <Link href="/sell">
+                  <div className="text-gray-three hover:text-primary-accent cursor-pointer">Sell Your Car</div>
+                </Link>
+              </li>
+              <li>
+                <Link href="/about">
+                  <div className="text-gray-three hover:text-primary-accent cursor-pointer">About Us</div>
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact">
+                  <div className="text-gray-three hover:text-primary-accent cursor-pointer">Contact</div>
+                </Link>
+              </li>
             </ul>
           </div>
           
@@ -44,60 +73,60 @@ const Footer = () => {
             <h3 className="text-lg font-bold mb-4">Contact Info</h3>
             <ul className="space-y-2">
               <li className="flex items-start">
-                <i className="fas fa-map-marker-alt mt-1 mr-3 text-gray-300"></i>
-                <span className="text-gray-300">{CONTACT_INFO.address}</span>
+                <MapPin className="mt-1 mr-3 text-primary-accent h-5 w-5" />
+                <span className="text-gray-three">{CONTACT_INFO.address}</span>
               </li>
               <li className="flex items-center">
-                <i className="fas fa-phone-alt mr-3 text-gray-300"></i>
-                <a href={`tel:${CONTACT_INFO.phone}`} className="text-gray-300 hover:text-white">
+                <Phone className="mr-3 text-primary-accent h-5 w-5" />
+                <a href={`tel:${CONTACT_INFO.phone}`} className="text-gray-three hover:text-primary-accent">
                   {CONTACT_INFO.phone}
                 </a>
               </li>
               <li className="flex items-center">
-                <i className="fas fa-envelope mr-3 text-gray-300"></i>
-                <a href={`mailto:${CONTACT_INFO.email}`} className="text-gray-300 hover:text-white">
+                <Mail className="mr-3 text-primary-accent h-5 w-5" />
+                <a href={`mailto:${CONTACT_INFO.email}`} className="text-gray-three hover:text-primary-accent">
                   {CONTACT_INFO.email}
                 </a>
               </li>
             </ul>
             
             <div className="mt-4">
-              <h4 className="font-medium mb-2">Business Hours:</h4>
-              <p className="text-gray-300 text-sm">{BUSINESS_HOURS.weekdays}</p>
-              <p className="text-gray-300 text-sm">{BUSINESS_HOURS.saturday}</p>
-              <p className="text-gray-300 text-sm">{BUSINESS_HOURS.sunday}</p>
+              <h4 className="font-medium mb-2 text-primary-white">Business Hours:</h4>
+              <p className="text-gray-three text-sm">{BUSINESS_HOURS.weekdays}</p>
+              <p className="text-gray-three text-sm">{BUSINESS_HOURS.saturday}</p>
+              <p className="text-gray-three text-sm">{BUSINESS_HOURS.sunday}</p>
             </div>
           </div>
           
           <div>
             <h3 className="text-lg font-bold mb-4">Newsletter</h3>
-            <p className="text-gray-300 mb-4">Subscribe to our newsletter for the latest inventory and special offers.</p>
+            <p className="text-gray-three mb-4">Subscribe to our newsletter for the latest inventory and special offers.</p>
             
             <form>
               <div className="flex mb-2">
                 <input 
                   type="email" 
                   placeholder="Your email address" 
-                  className="flex-grow p-2 text-dark rounded-l-md focus:outline-none"
+                  className="flex-grow p-2 text-secondary-dark rounded-l-md focus:outline-none"
                 />
-                <button type="submit" className="bg-primary text-white px-4 py-2 rounded-r-md hover:bg-blue-700 transition">
-                  <i className="fas fa-paper-plane"></i>
+                <button type="submit" className="bg-primary-color text-primary-white px-4 py-2 rounded-r-md hover:bg-primary-dark transition">
+                  <Send className="h-5 w-5" />
                 </button>
               </div>
               <label className="flex items-center">
-                <input type="checkbox" className="form-checkbox text-primary rounded" />
-                <span className="ml-2 text-xs text-gray-300">I agree to receive marketing emails</span>
+                <input type="checkbox" className="form-checkbox text-primary-color rounded" />
+                <span className="ml-2 text-xs text-gray-three">I agree to receive marketing emails</span>
               </label>
             </form>
           </div>
         </div>
         
-        <div className="border-t border-gray-800 pt-8 mt-8 text-center text-gray-400 text-sm">
-          <p>&copy; {new Date().getFullYear()} AutoElite. All rights reserved.</p>
+        <div className="border-t border-secondary-light pt-8 mt-8 text-center text-gray-two text-sm">
+          <p>&copy; {new Date().getFullYear()} RJ Motorworld. All rights reserved.</p>
           <div className="mt-2 space-x-4">
-            <a href="#" className="hover:text-white">Privacy Policy</a>
-            <a href="#" className="hover:text-white">Terms of Service</a>
-            <a href="#" className="hover:text-white">Cookie Policy</a>
+            <a href="#" className="text-gray-two hover:text-primary-accent">Privacy Policy</a>
+            <a href="#" className="text-gray-two hover:text-primary-accent">Terms of Service</a>
+            <a href="#" className="text-gray-two hover:text-primary-accent">Cookie Policy</a>
           </div>
         </div>
       </div>

@@ -109,6 +109,7 @@ export const SOCIAL_MEDIA = {
   facebook: "https://facebook.com/rjmotorworld",
   instagram: "https://instagram.com/rjmotorworld",
   twitter: "https://twitter.com/rjmotorworld",
+  youtube: "https://youtube.com/rjmotorworld",
   whatsapp: "+254 700 123 456"
 };
 

@@ -22,7 +22,7 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-white shadow-md sticky top-0 z-50">
+    <header className="bg-primary-white shadow-md sticky top-0 z-50">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center py-3">
           <div className="flex items-center">
@@ -43,8 +43,8 @@ const Header = () => {
               <Link key={item.href} href={item.href}>
                 <div className={`font-medium cursor-pointer ${
                   location === item.href 
-                    ? 'text-primary border-b-2 border-accent' 
-                    : 'text-gray-700 hover:text-accent transition'
+                    ? 'text-primary-color border-b-2 border-primary-accent' 
+                    : 'text-secondary-color hover:text-primary-color transition'
                 }`}>
                   {item.label}
                 </div>
@@ -56,7 +56,7 @@ const Header = () => {
           <div className="md:hidden">
             <button
               onClick={toggleMobileMenu}
-              className="text-black focus:outline-none"
+              className="text-secondary-color focus:outline-none"
               aria-label="Toggle menu"
             >
               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -67,14 +67,14 @@ const Header = () => {
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
           <div className="md:hidden pb-4">
-            <nav className="flex flex-col space-y-4 pt-2 border-t border-gray-200">
+            <nav className="flex flex-col space-y-4 pt-2 border-t border-gray-three">
               {navigation.map((item) => (
                 <Link key={item.href} href={item.href}>
                   <div 
                     className={`font-medium cursor-pointer ${
                       location === item.href 
-                        ? 'text-accent' 
-                        : 'text-gray-700 hover:text-accent transition'
+                        ? 'text-primary-color' 
+                        : 'text-secondary-color hover:text-primary-color transition'
                     }`}
                     onClick={() => setMobileMenuOpen(false)}
                   >
