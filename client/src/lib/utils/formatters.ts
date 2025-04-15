@@ -1,10 +1,10 @@
 /**
- * Formats a number as currency
+ * Formats a number as currency in Kenyan Shillings
  */
 export const formatCurrency = (amount: number): string => {
-  return new Intl.NumberFormat('en-US', {
+  return new Intl.NumberFormat('en-KE', {
     style: 'currency',
-    currency: 'USD',
+    currency: 'KES',
     maximumFractionDigits: 0
   }).format(amount);
 };
@@ -13,14 +13,14 @@ export const formatCurrency = (amount: number): string => {
  * Formats a number with commas as thousands separators
  */
 export const formatNumber = (number: number): string => {
-  return new Intl.NumberFormat('en-US').format(number);
+  return new Intl.NumberFormat('en-KE').format(number);
 };
 
 /**
- * Formats mileage with "miles" suffix
+ * Formats mileage with "km" suffix for kilometers
  */
 export const formatMileage = (mileage: number): string => {
-  return `${formatNumber(mileage)} miles`;
+  return `${formatNumber(mileage)} km`;
 };
 
 /**
@@ -35,7 +35,7 @@ export const formatCarSpecs = (
   const parts = [year.toString()];
   
   if (mileage) {
-    parts.push(`${formatNumber(mileage)} miles`);
+    parts.push(`${formatNumber(mileage)} km`);
   }
   
   if (fuelType) {

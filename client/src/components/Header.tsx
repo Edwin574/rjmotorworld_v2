@@ -70,8 +70,8 @@ const Header = () => {
             <nav className="flex flex-col space-y-4 pt-2 border-t border-gray-200">
               {navigation.map((item) => (
                 <Link key={item.href} href={item.href}>
-                  <a 
-                    className={`font-medium ${
+                  <div 
+                    className={`font-medium cursor-pointer ${
                       location === item.href 
                         ? 'text-accent' 
                         : 'text-gray-700 hover:text-accent transition'
@@ -79,7 +79,7 @@ const Header = () => {
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     {item.label}
-                  </a>
+                  </div>
                 </Link>
               ))}
             </nav>
