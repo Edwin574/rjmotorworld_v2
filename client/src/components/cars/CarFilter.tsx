@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Select } from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { YEARS, PRICE_RANGES } from "@/lib/constants";
 import type { CarBrand, CarModel } from "@shared/schema";
@@ -132,16 +132,22 @@ const CarFilter = ({ onFilterChange, initialFilters = {} }: CarFilterProps) => {
           <div className="mb-6">
             <Label className="text-lg font-semibold">Make</Label>
             <div className="relative mt-2">
-              <Select 
-                value={filters.make} 
-                onValueChange={(value) => setFilters(prev => ({ ...prev, make: value, model: '' }))}
-                className="w-full bg-white border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-primary"
-              >
-                <option value="">All Makes</option>
+              <Select
+              value={filters.make}
+              onValueChange={(value) => setFilters(prev => ({ ...prev, make: value, model: '' }))}
+            >
+              <SelectTrigger className="w-full bg-white">
+                <SelectValue placeholder="All Makes" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">All Makes</SelectItem>
                 {brands.map((brand) => (
-                  <option key={brand.id} value={brand.name}>{brand.name}</option>
+                  <SelectItem key={brand.id} value={brand.name}>
+                    {brand.name}
+                  </SelectItem>
                 ))}
-              </Select>
+              </SelectContent>
+            </Select>
             </div>
           </div>
 
