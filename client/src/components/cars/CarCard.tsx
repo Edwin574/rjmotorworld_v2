@@ -46,7 +46,7 @@ const CarCard = ({ car }: CarCardProps) => {
       <div className="p-6">
         <h3 className="text-xl font-bold mb-2 text-black">{car.title}</h3>
         <p className="text-gray-600 mb-4">
-          {formatCarSpecs(car.year, car.mileage, car.fuelType, car.transmission)}
+          {formatCarSpecs(car.year, car.mileage || 0, car.fuelType, car.transmission)}
         </p>
         <div className="flex justify-between items-center">
           <div className="text-xl font-bold text-accent">{formatCurrency(car.price)}</div>
