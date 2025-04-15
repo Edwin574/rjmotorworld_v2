@@ -15,7 +15,7 @@ const CarCard = ({ car }: CarCardProps) => {
     : "https://placehold.co/600x400?text=No+Image";
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
+    <div className="bg-primary-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
       <div className="relative">
         <img 
           src={getOptimizedImageUrl(thumbnailImage, 600, 400)}
@@ -24,34 +24,34 @@ const CarCard = ({ car }: CarCardProps) => {
         />
         <div className="absolute top-0 left-0 mt-4 ml-4 flex gap-2">
           {car.condition === 'new' ? (
-            <span className="bg-black text-white text-xs font-bold px-2 py-1 rounded">NEW</span>
+            <span className="bg-secondary-dark text-primary-white text-xs font-bold px-2 py-1 rounded">NEW</span>
           ) : (
-            <span className="bg-gray-700 text-white text-xs font-bold px-2 py-1 rounded">USED</span>
+            <span className="bg-secondary-light text-primary-white text-xs font-bold px-2 py-1 rounded">USED</span>
           )}
           
           {car.featured && (
-            <span className="bg-accent text-white text-xs font-bold px-2 py-1 rounded">FEATURED</span>
+            <span className="bg-primary-accent text-primary-white text-xs font-bold px-2 py-1 rounded">FEATURED</span>
           )}
 
           {car.fuelType === 'Electric' && (
-            <span className="bg-success text-white text-xs font-bold px-2 py-1 rounded">ELECTRIC</span>
+            <span className="bg-[#10b981] text-primary-white text-xs font-bold px-2 py-1 rounded">ELECTRIC</span>
           )}
           
           {car.fuelType === 'Hybrid' && (
-            <span className="bg-teal-500 text-white text-xs font-bold px-2 py-1 rounded">HYBRID</span>
+            <span className="bg-[#14b8a6] text-primary-white text-xs font-bold px-2 py-1 rounded">HYBRID</span>
           )}
         </div>
       </div>
       
       <div className="p-6">
-        <h3 className="text-xl font-bold mb-2 text-black">{car.title}</h3>
-        <p className="text-gray-600 mb-4">
+        <h3 className="text-xl font-bold mb-2 text-secondary-color">{car.title}</h3>
+        <p className="text-gray-one mb-4">
           {formatCarSpecs(car.year, car.mileage || 0, car.fuelType, car.transmission)}
         </p>
         <div className="flex justify-between items-center">
-          <div className="text-xl font-bold text-accent">{formatCurrency(car.price)}</div>
+          <div className="text-xl font-bold text-primary-color">{formatCurrency(car.price)}</div>
           <Link href={`/car/${car.id}`}>
-            <div className="inline-flex items-center text-black hover:text-accent transition font-medium cursor-pointer">
+            <div className="inline-flex items-center text-secondary-color hover:text-primary-color transition font-medium cursor-pointer">
               View Details <ArrowRight className="h-4 w-4 ml-1" />
             </div>
           </Link>

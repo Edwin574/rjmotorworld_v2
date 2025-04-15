@@ -1,32 +1,33 @@
 import { Link } from "wouter";
-
-import { CURRENCY } from "@/lib/constants";
+import { CURRENCY, THEME_COLORS } from "@/lib/constants";
 
 const Hero = () => {
   return (
-    <section className="bg-gradient-to-b from-black to-gray-900 text-white py-16 md:py-24">
+    <section className="bg-gradient-to-b from-secondary-dark to-secondary-color text-primary-white py-16 md:py-24">
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row items-center">
           <div className="md:w-1/2 mb-8 md:mb-0">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Discover Your Dream Car</h1>
-            <p className="text-lg md:text-xl mb-8 text-gray-100">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary-color to-primary-accent bg-clip-text text-transparent">
+              Discover Your Dream Car
+            </h1>
+            <p className="text-lg md:text-xl mb-8 text-gray-three">
               Nairobi's premium car dealership with the finest selection of vehicles at competitive prices.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link href="/cars/new">
-                <div className="bg-white text-black px-6 py-3 rounded-md font-medium hover:bg-gray-100 transition text-center cursor-pointer">
+                <div className="bg-primary-white text-secondary-color px-6 py-3 rounded-md font-medium hover:bg-gray-three transition text-center cursor-pointer">
                   New Cars
                 </div>
               </Link>
               <Link href="/cars/used">
-                <div className="bg-accent text-white px-6 py-3 rounded-md font-medium hover:bg-red-700 transition text-center cursor-pointer">
+                <div className="bg-primary-color text-primary-white px-6 py-3 rounded-md font-medium hover:bg-primary-dark transition text-center cursor-pointer">
                   Used Cars
                 </div>
               </Link>
             </div>
           </div>
           <div className="md:w-1/2 relative">
-            <div className="absolute top-3 right-3 bg-accent text-white px-3 py-1 rounded-full shadow-lg font-semibold">
+            <div className="absolute top-3 right-3 bg-primary-accent text-primary-white px-3 py-1 rounded-full shadow-lg font-semibold">
               From {CURRENCY.formatter(1500000)}
             </div>
             <img 
