@@ -1,6 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --primary-white: #ffffff;
+  --dark-primary: #004a77;
+  --dark-secondary: #0b0c10;
+  --gray-one: #989898;
+  --gray-two: #a9a9a9;
+  --gray-three: #d7d7d7;
+  --light-secondary: #152836;
+  --primary-accent-color: #4da8da;
+  --primary-color: #007cc7;
+  --secondary-color: #12232e;
+}
 
 @layer base {
   * {
@@ -8,6 +22,7 @@
   }
 
   body {
-    @apply font-sans antialiased bg-background text-foreground;
+    font-family: 'Lato', sans-serif;
+    @apply antialiased bg-background text-foreground;
   }
 }

@@ -112,15 +112,18 @@ export const SOCIAL_MEDIA = {
   whatsapp: "+254 700 123 456"
 };
 
-// Theme colors - based on the RJ Motorworld logo
+// Theme colors for RJ Motorworld
 export const THEME_COLORS = {
-  primary: '#000000',    // Black as primary color (from logo)
-  secondary: '#ffffff',  // White as secondary color (from logo)
-  accent: '#e63946',     // Accent color for buttons and highlights
-  dark: '#111827',
-  grayMedium: '#374151',
-  grayLight: '#9ca3af',
-  offWhite: '#f3f4f6',
+  primaryWhite: '#ffffff',
+  darkPrimary: '#004a77',
+  darkSecondary: '#0b0c10',
+  grayOne: '#989898',
+  grayTwo: '#a9a9a9',
+  grayThree: '#d7d7d7',
+  lightSecondary: '#152836',
+  primaryAccent: '#4da8da',
+  primary: '#007cc7',
+  secondary: '#12232e',
   success: '#10b981',
   error: '#ef4444',
   warning: '#f59e0b'
