@@ -128,28 +128,38 @@ const CarFilter = ({ onFilterChange, initialFilters = {} }: CarFilterProps) => {
 
       {showAdvanced && (
         <div className="space-y-4">
-          {/* Brand & Model */}
-          <div>
-            <h3 className="text-lg font-semibold mb-3">Brand & Model</h3>
-            <div className="space-y-3">
+          {/* Make Selection */}
+          <div className="mb-6">
+            <Label className="text-lg font-semibold">Make</Label>
+            <div className="relative mt-2">
               <Select 
                 value={filters.make} 
                 onValueChange={(value) => setFilters(prev => ({ ...prev, make: value, model: '' }))}
-                className="w-full"
+                className="w-full bg-white border border-gray-300 rounded-lg p-2.5 focus:ring-2 focus:ring-primary"
               >
-                <option value="">Vehicle Brand</option>
+                <option value="">All Makes</option>
                 {brands.map((brand) => (
                   <option key={brand.id} value={brand.name}>{brand.name}</option>
                 ))}
               </Select>
+            </div>
+          </div>
 
+          {/* Model Selection */}
+          <div className="mb-6">
+            <Label className="text-lg font-semibold">Model</Label>
+            <div className="relative mt-2">
               <Select 
                 value={filters.model} 
                 onValueChange={(value) => setFilters(prev => ({ ...prev, model: value }))}
-                className="w-full"
+                className={`w-full bg-white border border-gray-300 rounded-lg p-2.5 ${
+                  !filters.make 
+                    ? 'bg-gray-100 cursor-not-allowed' 
+                    : 'focus:ring-2 focus:ring-primary'
+                }`}
                 disabled={!filters.make}
               >
-                <option value="">{filters.make ? 'Brand Model' : 'Select Brand First'}</option>
+                <option value="">{filters.make ? 'All Models' : 'Select Make First'}</option>
                 {models.map((model) => (
                   <option key={model.id} value={model.name}>{model.name}</option>
                 ))}
