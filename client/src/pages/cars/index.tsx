@@ -80,23 +80,25 @@ const CarsPage = () => {
           {/* Car Listings */}
           <div className="lg:w-3/4">
             {/* Sort Controls */}
-            <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-              <div className="text-gray-medium">
-                Showing <span className="font-bold">{sortedCars.length}</span> results
-              </div>
-              <div className="flex items-center space-x-2">
-                <label className="text-gray-medium">Sort by:</label>
-                <Select
-                  value={sortBy}
-                  onValueChange={setSortBy}
-                  className="p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
-                >
-                  <option value="">Default</option>
-                  <option value="price_asc">Price: Low to High</option>
-                  <option value="price_desc">Price: High to Low</option>
-                  <option value="newest">Newest First</option>
-                  <option value="mileage">Mileage: Low to High</option>
-                </Select>
+            <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
+              <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div className="text-gray-700">
+                  Showing <span className="font-bold text-primary">{sortedCars.length}</span> results
+                </div>
+                <div className="flex items-center gap-3">
+                  <label className="text-gray-700 whitespace-nowrap">Sort by:</label>
+                  <Select
+                    value={sortBy}
+                    onValueChange={setSortBy}
+                    className="min-w-[200px] bg-gray-50 border-gray-200"
+                  >
+                    <option value="">Default</option>
+                    <option value="price_asc">Price: Low to High</option>
+                    <option value="price_desc">Price: High to Low</option>
+                    <option value="newest">Newest First</option>
+                    <option value="mileage">Mileage: Low to High</option>
+                  </Select>
+                </div>
               </div>
             </div>
             

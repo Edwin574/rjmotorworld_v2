@@ -1,9 +1,11 @@
+
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
-import { YEARS, PRICE_RANGES, MILEAGE_RANGES } from "@/lib/constants";
+import { Input } from "@/components/ui/input";
+import { YEARS, PRICE_RANGES } from "@/lib/constants";
 import type { CarBrand, CarModel } from "@shared/schema";
 
 interface CarFilterProps {
@@ -13,6 +15,7 @@ interface CarFilterProps {
 
 const CarFilter = ({ onFilterChange, initialFilters = {} }: CarFilterProps) => {
   const [filters, setFilters] = useState({
+    search: initialFilters.search || '',
     condition: initialFilters.condition || '',
     make: initialFilters.make || '',
     model: initialFilters.model || '',
@@ -20,9 +23,9 @@ const CarFilter = ({ onFilterChange, initialFilters = {} }: CarFilterProps) => {
     maxYear: initialFilters.maxYear || '',
     minPrice: initialFilters.minPrice || '',
     maxPrice: initialFilters.maxPrice || '',
-    minMileage: initialFilters.minMileage || '',
-    maxMileage: initialFilters.maxMileage || '',
   });
+
+  const [showAdvanced, setShowAdvanced] = useState(false);
 
   // Fetch car brands
   const { data: brands = [] } = useQuery<CarBrand[]>({
@@ -35,6 +38,26 @@ const CarFilter = ({ onFilterChange, initialFilters = {} }: CarFilterProps) => {
     enabled: !!filters.make,
   });
 
+  // Price range options
+  const priceRanges = [
+    { label: '0 - 500K', min: 0, max: 500000 },
+    { label: '500K - 1M', min: 500000, max: 1000000 },
+    { label: '1M - 2M', min: 1000000, max: 2000000 },
+    { label: '2M - 3M', min: 2000000, max: 3000000 },
+    { label: '3M - 5M', min: 3000000, max: 5000000 },
+    { label: '5M - 10M', min: 5000000, max: 10000000 },
+    { label: 'Above 10M', min: 10000000, max: null },
+  ];
+
+  // Handle price range selection
+  const handlePriceRangeClick = (min: number, max: number | null) => {
+    setFilters(prev => ({
+      ...prev,
+      minPrice: min.toString(),
+      maxPrice: max?.toString() || '',
+    }));
+  };
+
   // Apply filters
   const applyFilters = () => {
     onFilterChange(filters);
@@ -43,6 +66,7 @@ const CarFilter = ({ onFilterChange, initialFilters = {} }: CarFilterProps) => {
   // Reset filters
   const resetFilters = () => {
     setFilters({
+      search: '',
       condition: '',
       make: '',
       model: '',
@@ -50,163 +74,145 @@ const CarFilter = ({ onFilterChange, initialFilters = {} }: CarFilterProps) => {
       maxYear: '',
       minPrice: '',
       maxPrice: '',
-      minMileage: '',
-      maxMileage: '',
     });
     onFilterChange({});
   };
 
-  // Update filter state
-  const handleFilterChange = (name: string, value: string) => {
-    // Reset model when make changes
-    if (name === 'make' && value !== filters.make) {
-      setFilters({ ...filters, [name]: value, model: '' });
-    } else {
-      setFilters({ ...filters, [name]: value });
-    }
-  };
-
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <h2 className="text-xl font-bold mb-4">Filters</h2>
-      
-      {/* Status Filter */}
-      <div className="mb-6">
-        <Label className="block text-gray-medium font-medium mb-2">Car Status</Label>
-        <Select 
-          value={filters.condition} 
-          onValueChange={(value) => handleFilterChange('condition', value)}
-          className="w-full p-3 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
-        >
-          <option value="">All Cars</option>
-          <option value="new">New Cars</option>
-          <option value="used">Used Cars</option>
-        </Select>
+    <div className="bg-white rounded-lg shadow-md p-6 space-y-6">
+      {/* Search Input */}
+      <div className="relative">
+        <Input
+          type="text"
+          placeholder="Search vehicle name"
+          value={filters.search}
+          onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
+          className="pl-10 w-full"
+        />
+        <i className="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
       </div>
-      
-      {/* Make Filter */}
-      <div className="mb-6">
-        <Label className="block text-gray-medium font-medium mb-2">Make</Label>
-        <Select 
-          value={filters.make} 
-          onValueChange={(value) => handleFilterChange('make', value)}
-          className="w-full p-3 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
-        >
-          <option value="">All Makes</option>
-          {brands.map((brand) => (
-            <option key={brand.id} value={brand.name}>{brand.name}</option>
-          ))}
-        </Select>
-      </div>
-      
-      {/* Model Filter */}
-      <div className="mb-6">
-        <Label className="block text-gray-medium font-medium mb-2">Model</Label>
-        <Select 
-          value={filters.model} 
-          onValueChange={(value) => handleFilterChange('model', value)}
-          className="w-full p-3 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
-          disabled={!filters.make}
-        >
-          <option value="">{filters.make ? 'All Models' : 'Select Make First'}</option>
-          {models.map((model) => (
-            <option key={model.id} value={model.name}>{model.name}</option>
-          ))}
-        </Select>
-      </div>
-      
-      {/* Year Range Filter */}
-      <div className="mb-6">
-        <Label className="block text-gray-medium font-medium mb-2">Year</Label>
-        <div className="flex space-x-4">
-          <Select 
-            value={filters.minYear} 
-            onValueChange={(value) => handleFilterChange('minYear', value)}
-            className="w-1/2 p-3 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
-          >
-            <option value="">Min Year</option>
-            {YEARS.map((year) => (
-              <option key={year} value={year}>{year}</option>
-            ))}
-          </Select>
-          <Select 
-            value={filters.maxYear} 
-            onValueChange={(value) => handleFilterChange('maxYear', value)}
-            className="w-1/2 p-3 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
-          >
-            <option value="">Max Year</option>
-            {YEARS.map((year) => (
-              <option key={year} value={year}>{year}</option>
-            ))}
-          </Select>
-        </div>
-      </div>
-      
+
       {/* Price Range Filter */}
-      <div className="mb-6">
-        <Label className="block text-gray-medium font-medium mb-2">Price Range</Label>
-        <div className="flex space-x-4">
-          <Select 
-            value={filters.minPrice} 
-            onValueChange={(value) => handleFilterChange('minPrice', value)}
-            className="w-1/2 p-3 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
+      <div>
+        <h3 className="text-lg font-semibold mb-3">Filter by budget</h3>
+        <div className="grid grid-cols-3 gap-2">
+          {priceRanges.map((range, index) => (
+            <button
+              key={index}
+              onClick={() => handlePriceRangeClick(range.min, range.max)}
+              className={`px-3 py-2 text-sm border rounded-md transition-colors
+                ${filters.minPrice === range.min.toString() 
+                  ? 'bg-primary text-white border-primary' 
+                  : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'}`}
+            >
+              {range.label}
+            </button>
+          ))}
+          <button
+            onClick={resetFilters}
+            className="px-3 py-2 text-sm bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors"
           >
-            <option value="">Min Price</option>
-            {PRICE_RANGES.filter(range => range.min !== undefined).map((range, idx) => (
-              <option key={idx} value={range.min}>{`$${(range.min as number).toLocaleString()}`}</option>
-            ))}
-          </Select>
-          <Select 
-            value={filters.maxPrice} 
-            onValueChange={(value) => handleFilterChange('maxPrice', value)}
-            className="w-1/2 p-3 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
-          >
-            <option value="">Max Price</option>
-            {PRICE_RANGES.filter(range => range.max !== undefined).map((range, idx) => (
-              <option key={idx} value={range.max}>{`$${(range.max as number).toLocaleString()}`}</option>
-            ))}
-          </Select>
+            Clear
+          </button>
         </div>
       </div>
-      
-      {/* Mileage Range Filter */}
-      <div className="mb-6">
-        <Label className="block text-gray-medium font-medium mb-2">Mileage</Label>
-        <div className="flex space-x-4">
-          <Select 
-            value={filters.minMileage} 
-            onValueChange={(value) => handleFilterChange('minMileage', value)}
-            className="w-1/2 p-3 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
-          >
-            <option value="">Min Mileage</option>
-            {MILEAGE_RANGES.filter(range => range.min !== undefined).map((range, idx) => (
-              <option key={idx} value={range.min}>{`${(range.min as number).toLocaleString()} miles`}</option>
-            ))}
-          </Select>
-          <Select 
-            value={filters.maxMileage} 
-            onValueChange={(value) => handleFilterChange('maxMileage', value)}
-            className="w-1/2 p-3 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
-          >
-            <option value="">Max Mileage</option>
-            {MILEAGE_RANGES.filter(range => range.max !== undefined).map((range, idx) => (
-              <option key={idx} value={range.max}>{`${(range.max as number).toLocaleString()} miles`}</option>
-            ))}
-          </Select>
+
+      {/* Advanced Search Toggle */}
+      <button
+        onClick={() => setShowAdvanced(!showAdvanced)}
+        className="flex items-center text-gray-700 hover:text-primary transition-colors"
+      >
+        <span>Click here for Advanced search</span>
+        <i className={`fas fa-chevron-${showAdvanced ? 'up' : 'down'} ml-2`}></i>
+      </button>
+
+      {showAdvanced && (
+        <div className="space-y-4">
+          {/* Brand & Model */}
+          <div>
+            <h3 className="text-lg font-semibold mb-3">Brand & Model</h3>
+            <div className="space-y-3">
+              <Select 
+                value={filters.make} 
+                onValueChange={(value) => setFilters(prev => ({ ...prev, make: value, model: '' }))}
+                className="w-full"
+              >
+                <option value="">Vehicle Brand</option>
+                {brands.map((brand) => (
+                  <option key={brand.id} value={brand.name}>{brand.name}</option>
+                ))}
+              </Select>
+
+              <Select 
+                value={filters.model} 
+                onValueChange={(value) => setFilters(prev => ({ ...prev, model: value }))}
+                className="w-full"
+                disabled={!filters.make}
+              >
+                <option value="">{filters.make ? 'Brand Model' : 'Select Brand First'}</option>
+                {models.map((model) => (
+                  <option key={model.id} value={model.name}>{model.name}</option>
+                ))}
+              </Select>
+            </div>
+          </div>
+
+          {/* Year Range */}
+          <div>
+            <h3 className="text-lg font-semibold mb-3">Year of Manufacture</h3>
+            <div className="grid grid-cols-2 gap-3">
+              <Input
+                type="number"
+                placeholder="Min YOM"
+                value={filters.minYear}
+                onChange={(e) => setFilters(prev => ({ ...prev, minYear: e.target.value }))}
+                className="w-full"
+              />
+              <Input
+                type="number"
+                placeholder="Max YOM"
+                value={filters.maxYear}
+                onChange={(e) => setFilters(prev => ({ ...prev, maxYear: e.target.value }))}
+                className="w-full"
+              />
+            </div>
+          </div>
+
+          {/* Price Range Inputs */}
+          <div>
+            <h3 className="text-lg font-semibold mb-3">Price & Currency</h3>
+            <div className="grid grid-cols-2 gap-3">
+              <Input
+                type="number"
+                placeholder="Min Price"
+                value={filters.minPrice}
+                onChange={(e) => setFilters(prev => ({ ...prev, minPrice: e.target.value }))}
+                className="w-full"
+              />
+              <Input
+                type="number"
+                placeholder="Max Price"
+                value={filters.maxPrice}
+                onChange={(e) => setFilters(prev => ({ ...prev, maxPrice: e.target.value }))}
+                className="w-full"
+              />
+            </div>
+          </div>
         </div>
-      </div>
-      
-      <div className="flex flex-col sm:flex-row gap-3">
+      )}
+
+      {/* Action Buttons */}
+      <div className="flex flex-col sm:flex-row gap-3 pt-4">
         <Button 
           onClick={applyFilters}
-          className="w-full bg-primary text-white py-3 px-4 rounded-md font-medium hover:bg-blue-700 transition"
+          className="w-full bg-black text-white hover:bg-gray-800"
         >
-          Apply Filters
+          Search
         </Button>
         <Button 
           onClick={resetFilters}
           variant="outline"
-          className="w-full py-3 px-4 rounded-md font-medium"
+          className="w-full"
         >
           Reset
         </Button>
