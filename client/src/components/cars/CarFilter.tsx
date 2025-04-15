@@ -155,20 +155,22 @@ const CarFilter = ({ onFilterChange, initialFilters = {} }: CarFilterProps) => {
           <div className="mb-6">
             <Label className="text-lg font-semibold">Model</Label>
             <div className="relative mt-2">
-              <Select 
-                value={filters.model} 
+              <Select
+                value={filters.model}
                 onValueChange={(value) => setFilters(prev => ({ ...prev, model: value }))}
-                className={`w-full bg-white border border-gray-300 rounded-lg p-2.5 ${
-                  !filters.make 
-                    ? 'bg-gray-100 cursor-not-allowed' 
-                    : 'focus:ring-2 focus:ring-primary'
-                }`}
                 disabled={!filters.make}
               >
-                <option value="">{filters.make ? 'All Models' : 'Select Make First'}</option>
-                {models.map((model) => (
-                  <option key={model.id} value={model.name}>{model.name}</option>
-                ))}
+                <SelectTrigger className={`w-full bg-white ${!filters.make ? 'bg-gray-100' : ''}`}>
+                  <SelectValue placeholder={filters.make ? 'All Models' : 'Select Make First'} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Models</SelectItem>
+                  {models.map((model) => (
+                    <SelectItem key={model.id} value={model.name}>
+                      {model.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
               </Select>
             </div>
           </div>
