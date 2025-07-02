@@ -172,7 +172,11 @@ export class MemStorage implements IStorage {
         stockNumber: "AUDI-RS7-2023-001",
         featured: false,
         images: [
-          "https://images.unsplash.com/photo-1617814076367-b759c7d7e738?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+          "https://images.unsplash.com/photo-1617814076367-b759c7d7e738?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1606611013875-4b5d4b5a3e85?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1612825173281-9a193378527e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
         ],
         features: [
           "Quattro All-Wheel Drive",
@@ -202,7 +206,11 @@ export class MemStorage implements IStorage {
         stockNumber: "MB-EQS-2023-001",
         featured: false,
         images: [
-          "https://images.unsplash.com/photo-1560031607-99279bc29ced?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+          "https://images.unsplash.com/photo-1560031607-99279bc29ced?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1618569419473-89b2634c0f67?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1609521263047-f8f205293f24?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
         ],
         features: [
           "MBUX Hyperscreen",
@@ -231,7 +239,11 @@ export class MemStorage implements IStorage {
         stockNumber: "BMW-530E-2020-001",
         featured: true,
         images: [
-          "https://images.unsplash.com/photo-1635048424329-a9bfb146d7aa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+          "https://images.unsplash.com/photo-1635048424329-a9bfb146d7aa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1580273916550-e323be2ae537?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1617654112808-106c1d614972?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
         ],
         features: [
           "iDrive 7.0",
@@ -260,7 +272,11 @@ export class MemStorage implements IStorage {
         stockNumber: "AUDI-Q5-2019-001",
         featured: false,
         images: [
-          "https://images.unsplash.com/photo-1619141522531-32525370eccd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+          "https://images.unsplash.com/photo-1619141522531-32525370eccd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1606611013875-4b5d4b5a3e85?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1621937303719-44b6c8c8eb52?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1618569419473-89b2634c0f67?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
         ],
         features: [
           "Audi Virtual Cockpit",
@@ -289,7 +305,11 @@ export class MemStorage implements IStorage {
         stockNumber: "MB-E-2020-001",
         featured: true,
         images: [
-          "https://images.unsplash.com/photo-1606152456819-b5077544842f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+          "https://images.unsplash.com/photo-1606152456819-b5077544842f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1560031607-99279bc29ced?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1609521263047-f8f205293f24?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
         ],
         features: [
           "MBUX Infotainment",
@@ -297,6 +317,108 @@ export class MemStorage implements IStorage {
           "Premium Package",
           "Wireless Charging",
           "Active Park Assist"
+        ]
+      },
+      {
+        title: "Toyota Camry Hybrid",
+        make: "Toyota",
+        model: "Camry",
+        year: 2022,
+        price: 28750,
+        mileage: 15432,
+        color: "Silver Metallic",
+        condition: "used" as const,
+        fuelType: "Hybrid",
+        transmission: "Automatic",
+        description: "Reliable 2022 Toyota Camry Hybrid with excellent fuel economy and proven reliability.",
+        bodyType: "Sedan",
+        engine: "2.5L Hybrid",
+        driveType: "Front-Wheel Drive",
+        vin: "4T1****1234567890",
+        stockNumber: "TOY-CAM-2022-001",
+        featured: false,
+        images: [
+          "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1612825173281-9a193378527e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1604169863924-aeeab4e69f7d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1621937303719-44b6c8c8eb52?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+        ],
+        features: [
+          "Toyota Safety Sense 2.0",
+          "Apple CarPlay & Android Auto",
+          "Dual-Zone Climate Control",
+          "Wireless Phone Charging",
+          "LED Headlights",
+          "Heated Front Seats"
+        ]
+      },
+      {
+        title: "BMW X5 xDrive40i",
+        make: "BMW",
+        model: "X5",
+        year: 2021,
+        price: 67850,
+        mileage: 22150,
+        color: "Carbon Black",
+        condition: "used" as const,
+        fuelType: "Petrol",
+        transmission: "Automatic",
+        description: "Luxurious 2021 BMW X5 with advanced technology and superior comfort for family adventures.",
+        bodyType: "SUV",
+        engine: "3.0L TwinPower Turbo",
+        driveType: "All-Wheel Drive",
+        vin: "5UX****1234567890",
+        stockNumber: "BMW-X5-2021-001",
+        featured: true,
+        images: [
+          "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1580273916550-e323be2ae537?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1621937303719-44b6c8c8eb52?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1617654112808-106c1d614972?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+        ],
+        features: [
+          "BMW iDrive 7.0",
+          "Panoramic Moonroof",
+          "Harman Kardon Sound",
+          "Ventilated Seats",
+          "Driving Assistant Pro",
+          "Third Row Seating"
+        ]
+      },
+      {
+        title: "Audi A4 Quattro",
+        make: "Audi",
+        model: "A4",
+        year: 2023,
+        price: 45900,
+        mileage: 8750,
+        color: "Glacier White",
+        condition: "new" as const,
+        fuelType: "Petrol",
+        transmission: "Automatic",
+        description: "Brand new 2023 Audi A4 with quattro all-wheel drive and cutting-edge technology.",
+        bodyType: "Sedan",
+        engine: "2.0L TFSI",
+        driveType: "All-Wheel Drive",
+        vin: "WAU****2023567890",
+        stockNumber: "AUDI-A4-2023-001",
+        featured: false,
+        images: [
+          "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1617814076367-b759c7d7e738?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1606611013875-4b5d4b5a3e85?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1612825173281-9a193378527e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+        ],
+        features: [
+          "Audi Virtual Cockpit Plus",
+          "MMI Touch Navigation",
+          "Bang & Olufsen Premium Audio",
+          "Quattro All-Wheel Drive",
+          "LED Matrix Headlights",
+          "Audi Pre Sense"
         ]
       }
     ];
