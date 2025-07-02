@@ -6,7 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -236,16 +236,20 @@ const MultiStepForm = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="block text-gray-medium font-medium mb-2">Make</FormLabel>
-                      <Select 
-                        value={field.value} 
-                        onValueChange={field.onChange}
-                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
-                      >
-                        <option value="">Select Make</option>
-                        {CAR_BRANDS.map((brand) => (
-                          <option key={brand.id} value={brand.name}>{brand.name}</option>
-                        ))}
-                      </Select>
+                      <FormControl>
+                        <Select value={field.value} onValueChange={field.onChange}>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select Make" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {CAR_BRANDS.map((brand) => (
+                              <SelectItem key={brand.id} value={brand.name}>
+                                {brand.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -257,17 +261,24 @@ const MultiStepForm = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="block text-gray-medium font-medium mb-2">Model</FormLabel>
-                      <Select 
-                        value={field.value}
-                        onValueChange={field.onChange}
-                        disabled={!form.watch('make')}
-                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
-                      >
-                        <option value="">{form.watch('make') ? 'Select Model' : 'Select Make First'}</option>
-                        {models.map((model) => (
-                          <option key={model.id} value={model.name}>{model.name}</option>
-                        ))}
-                      </Select>
+                      <FormControl>
+                        <Select 
+                          value={field.value}
+                          onValueChange={field.onChange}
+                          disabled={!form.watch('make')}
+                        >
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder={form.watch('make') ? 'Select Model' : 'Select Make First'} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {models.map((model) => (
+                              <SelectItem key={model.id} value={model.name}>
+                                {model.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -293,16 +304,23 @@ const MultiStepForm = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="block text-gray-medium font-medium mb-2">Year</FormLabel>
-                      <Select 
-                        value={field.value.toString()} 
-                        onValueChange={(value) => field.onChange(parseInt(value))}
-                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
-                      >
-                        <option value="">Select Year</option>
-                        {YEARS.map((year) => (
-                          <option key={year} value={year.toString()}>{year}</option>
-                        ))}
-                      </Select>
+                      <FormControl>
+                        <Select 
+                          value={field.value.toString()} 
+                          onValueChange={(value) => field.onChange(parseInt(value))}
+                        >
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select Year" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {YEARS.map((year) => (
+                              <SelectItem key={year} value={year.toString()}>
+                                {year}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -334,16 +352,23 @@ const MultiStepForm = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="block text-gray-medium font-medium mb-2">Accident History</FormLabel>
-                      <Select 
-                        value={field.value || ""}
-                        onValueChange={field.onChange}
-                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
-                      >
-                        <option value="">Select Option</option>
-                        {ACCIDENT_HISTORY.map((option) => (
-                          <option key={option.value} value={option.value}>{option.label}</option>
-                        ))}
-                      </Select>
+                      <FormControl>
+                        <Select 
+                          value={field.value || ""}
+                          onValueChange={field.onChange}
+                        >
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select Option" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {ACCIDENT_HISTORY.map((option) => (
+                              <SelectItem key={option.value} value={option.value}>
+                                {option.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -486,16 +511,23 @@ const MultiStepForm = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="block text-gray-medium font-medium mb-2">Best Time to Contact</FormLabel>
-                      <Select 
-                        value={field.value || ""} 
-                        onValueChange={field.onChange}
-                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
-                      >
-                        <option value="">Select Time</option>
-                        {CONTACT_TIMES.map((time) => (
-                          <option key={time.value} value={time.value}>{time.label}</option>
-                        ))}
-                      </Select>
+                      <FormControl>
+                        <Select 
+                          value={field.value || ""} 
+                          onValueChange={field.onChange}
+                        >
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select Time" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {CONTACT_TIMES.map((time) => (
+                              <SelectItem key={time.value} value={time.value}>
+                                {time.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}

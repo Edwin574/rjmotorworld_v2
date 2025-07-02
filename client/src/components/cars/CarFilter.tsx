@@ -128,26 +128,46 @@ const CarFilter = ({ onFilterChange, initialFilters = {} }: CarFilterProps) => {
 
       {showAdvanced && (
         <div className="space-y-4">
+          {/* Condition Filter */}
+          <div className="mb-6">
+            <Label className="text-lg font-semibold">Condition</Label>
+            <div className="relative mt-2">
+              <Select
+                value={filters.condition}
+                onValueChange={(value) => setFilters(prev => ({ ...prev, condition: value }))}
+              >
+                <SelectTrigger className="w-full bg-white">
+                  <SelectValue placeholder="All Conditions" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="">All Conditions</SelectItem>
+                  <SelectItem value="new">New</SelectItem>
+                  <SelectItem value="used">Used</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
           {/* Make Selection */}
           <div className="mb-6">
             <Label className="text-lg font-semibold">Make</Label>
             <div className="relative mt-2">
               <Select
-              value={filters.make}
-              onValueChange={(value) => setFilters(prev => ({ ...prev, make: value, model: '' }))}
-            >
-              <SelectTrigger className="w-full bg-white">
-                <SelectValue placeholder="All Makes" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="">All Makes</SelectItem>
-                {brands.map((brand) => (
-                  <SelectItem key={brand.id} value={brand.name}>
-                    {brand.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+                value={filters.make}
+                onValueChange={(value) => setFilters(prev => ({ ...prev, make: value, model: '' }))}
+              >
+                <SelectTrigger className="w-full bg-white">
+                  <SelectValue placeholder="All Makes" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="">All Makes</SelectItem>
+                  {brands.map((brand) => (
+                    <SelectItem key={brand.id} value={brand.name}>
+                      {brand.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
