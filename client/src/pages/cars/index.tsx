@@ -3,7 +3,7 @@ import { useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import CarFilter from "@/components/cars/CarFilter";
 import CarCard from "@/components/cars/CarCard";
-import { Select } from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { Car } from "@shared/schema";
 
 const CarsPage = () => {
@@ -60,16 +60,17 @@ const CarsPage = () => {
       case 'newest':
         return b.year - a.year;
       case 'mileage':
-        return a.mileage - b.mileage;
+        return (a.mileage || 0) - (b.mileage || 0);
+      case 'default':
       default:
         return 0;
     }
   });
 
   return (
-    <section className="py-10 bg-gray-50">
+    <section className="py-10 bg-primary-white">
       <div className="container mx-auto px-4">
-        <h1 className="text-3xl font-bold mb-8">Browse Our Cars</h1>
+        <h1 className="text-3xl font-bold mb-8 text-secondary-color">Browse Our Cars</h1>
         
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Filters Sidebar */}
@@ -80,23 +81,27 @@ const CarsPage = () => {
           {/* Car Listings */}
           <div className="lg:w-3/4">
             {/* Sort Controls */}
-            <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
+            <div className="bg-primary-white rounded-lg shadow-sm p-4 mb-6">
               <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-                <div className="text-gray-700">
-                  Showing <span className="font-bold text-primary">{sortedCars.length}</span> results
+                <div className="text-gray-one">
+                  Showing <span className="font-bold text-primary-color">{sortedCars.length}</span> results
                 </div>
                 <div className="flex items-center gap-3">
-                  <label className="text-gray-700 whitespace-nowrap">Sort by:</label>
+                  <label className="text-gray-one whitespace-nowrap">Sort by:</label>
                   <Select
                     value={sortBy}
                     onValueChange={setSortBy}
-                    className="min-w-[200px] bg-gray-50 border-gray-200"
                   >
-                    <option value="">Default</option>
-                    <option value="price_asc">Price: Low to High</option>
-                    <option value="price_desc">Price: High to Low</option>
-                    <option value="newest">Newest First</option>
-                    <option value="mileage">Mileage: Low to High</option>
+                    <SelectTrigger className="min-w-[200px] bg-gray-50 border-gray-200">
+                      <SelectValue placeholder="Default" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="default">Default</SelectItem>
+                      <SelectItem value="price_asc">Price: Low to High</SelectItem>
+                      <SelectItem value="price_desc">Price: High to Low</SelectItem>
+                      <SelectItem value="newest">Newest First</SelectItem>
+                      <SelectItem value="mileage">Mileage: Low to High</SelectItem>
+                    </SelectContent>
                   </Select>
                 </div>
               </div>
@@ -106,7 +111,7 @@ const CarsPage = () => {
             {isLoading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {[...Array(6)].map((_, idx) => (
-                  <div key={idx} className="bg-white rounded-lg shadow-md overflow-hidden animate-pulse">
+                  <div key={idx} className="bg-primary-white rounded-lg shadow-md overflow-hidden animate-pulse">
                     <div className="h-48 bg-gray-300"></div>
                     <div className="p-6">
                       <div className="h-5 bg-gray-300 rounded mb-4"></div>
@@ -129,8 +134,8 @@ const CarsPage = () => {
             ) : (
               <div className="text-center py-12">
                 <i className="fas fa-car-alt text-5xl text-gray-300 mb-4"></i>
-                <h3 className="text-xl font-bold mb-2">No cars found</h3>
-                <p className="text-gray-medium">
+                <h3 className="text-xl font-bold mb-2 text-secondary-color">No cars found</h3>
+                <p className="text-gray-one">
                   Try adjusting your filters to find the perfect car.
                 </p>
               </div>
@@ -140,13 +145,13 @@ const CarsPage = () => {
             {sortedCars.length > 0 && (
               <div className="mt-10 flex justify-center">
                 <nav className="inline-flex shadow-sm">
-                  <a href="#" className="px-3 py-2 bg-white border border-gray-300 text-gray-medium rounded-l-md hover:bg-gray-50">
+                  <a href="#" className="px-3 py-2 bg-primary-white border border-gray-300 text-gray-one rounded-l-md hover:bg-gray-50">
                     <i className="fas fa-chevron-left"></i>
                   </a>
-                  <a href="#" className="px-4 py-2 bg-primary border border-primary text-white">1</a>
-                  <a href="#" className="px-4 py-2 bg-white border border-gray-300 text-gray-medium hover:bg-gray-50">2</a>
-                  <a href="#" className="px-4 py-2 bg-white border border-gray-300 text-gray-medium hover:bg-gray-50">3</a>
-                  <a href="#" className="px-3 py-2 bg-white border border-gray-300 text-gray-medium rounded-r-md hover:bg-gray-50">
+                  <a href="#" className="px-4 py-2 bg-primary-color border border-primary-color text-primary-white">1</a>
+                  <a href="#" className="px-4 py-2 bg-primary-white border border-gray-300 text-gray-one hover:bg-gray-50">2</a>
+                  <a href="#" className="px-4 py-2 bg-primary-white border border-gray-300 text-gray-one hover:bg-gray-50">3</a>
+                  <a href="#" className="px-3 py-2 bg-primary-white border border-gray-300 text-gray-one rounded-r-md hover:bg-gray-50">
                     <i className="fas fa-chevron-right"></i>
                   </a>
                 </nav>

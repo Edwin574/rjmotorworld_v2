@@ -16,9 +16,9 @@ interface CarFilterProps {
 const CarFilter = ({ onFilterChange, initialFilters = {} }: CarFilterProps) => {
   const [filters, setFilters] = useState({
     search: initialFilters.search || '',
-    condition: initialFilters.condition || '',
-    make: initialFilters.make || '',
-    model: initialFilters.model || '',
+    condition: initialFilters.condition || 'all',
+    make: initialFilters.make || 'all',
+    model: initialFilters.model || 'all',
     minYear: initialFilters.minYear || '',
     maxYear: initialFilters.maxYear || '',
     minPrice: initialFilters.minPrice || '',
@@ -35,7 +35,7 @@ const CarFilter = ({ onFilterChange, initialFilters = {} }: CarFilterProps) => {
   // Fetch car models when make is selected
   const { data: models = [] } = useQuery<CarModel[]>({
     queryKey: ['/api/models', filters.make],
-    enabled: !!filters.make,
+    enabled: !!filters.make && filters.make !== 'all',
   });
 
   // Price range options
@@ -60,16 +60,24 @@ const CarFilter = ({ onFilterChange, initialFilters = {} }: CarFilterProps) => {
 
   // Apply filters
   const applyFilters = () => {
-    onFilterChange(filters);
+    // Filter out "all" values and empty strings before sending to parent
+    const cleanFilters = Object.entries(filters).reduce((acc, [key, value]) => {
+      if (value && value !== 'all' && value !== '') {
+        acc[key] = value;
+      }
+      return acc;
+    }, {} as any);
+    
+    onFilterChange(cleanFilters);
   };
 
   // Reset filters
   const resetFilters = () => {
     setFilters({
       search: '',
-      condition: '',
-      make: '',
-      model: '',
+      condition: 'all',
+      make: 'all',
+      model: 'all',
       minYear: '',
       maxYear: '',
       minPrice: '',
@@ -79,7 +87,7 @@ const CarFilter = ({ onFilterChange, initialFilters = {} }: CarFilterProps) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 space-y-6">
+    <div className="bg-primary-white rounded-lg shadow-md p-6 space-y-6">
       {/* Search Input */}
       <div className="relative">
         <Input
@@ -94,7 +102,7 @@ const CarFilter = ({ onFilterChange, initialFilters = {} }: CarFilterProps) => {
 
       {/* Price Range Filter */}
       <div>
-        <h3 className="text-lg font-semibold mb-3">Filter by budget</h3>
+        <h3 className="text-lg font-semibold mb-3 text-secondary-color">Filter by budget</h3>
         <div className="grid grid-cols-3 gap-2">
           {priceRanges.map((range, index) => (
             <button
@@ -102,8 +110,8 @@ const CarFilter = ({ onFilterChange, initialFilters = {} }: CarFilterProps) => {
               onClick={() => handlePriceRangeClick(range.min, range.max)}
               className={`px-3 py-2 text-sm border rounded-md transition-colors
                 ${filters.minPrice === range.min.toString() 
-                  ? 'bg-primary text-white border-primary' 
-                  : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'}`}
+                  ? 'bg-primary-color text-primary-white border-primary-color' 
+                  : 'bg-primary-white text-gray-one border-gray-300 hover:bg-gray-50'}`}
             >
               {range.label}
             </button>
@@ -120,7 +128,7 @@ const CarFilter = ({ onFilterChange, initialFilters = {} }: CarFilterProps) => {
       {/* Advanced Search Toggle */}
       <button
         onClick={() => setShowAdvanced(!showAdvanced)}
-        className="flex items-center text-gray-700 hover:text-primary transition-colors"
+        className="flex items-center text-gray-one hover:text-primary-color transition-colors"
       >
         <span>Click here for Advanced search</span>
         <i className={`fas fa-chevron-${showAdvanced ? 'up' : 'down'} ml-2`}></i>
@@ -130,7 +138,7 @@ const CarFilter = ({ onFilterChange, initialFilters = {} }: CarFilterProps) => {
         <div className="space-y-4">
           {/* Condition Filter */}
           <div className="mb-6">
-            <Label className="text-lg font-semibold">Condition</Label>
+            <Label className="text-lg font-semibold text-secondary-color">Condition</Label>
             <div className="relative mt-2">
               <Select
                 value={filters.condition}
@@ -140,7 +148,7 @@ const CarFilter = ({ onFilterChange, initialFilters = {} }: CarFilterProps) => {
                   <SelectValue placeholder="All Conditions" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Conditions</SelectItem>
+                  <SelectItem value="all">All Conditions</SelectItem>
                   <SelectItem value="new">New</SelectItem>
                   <SelectItem value="used">Used</SelectItem>
                 </SelectContent>
@@ -150,17 +158,17 @@ const CarFilter = ({ onFilterChange, initialFilters = {} }: CarFilterProps) => {
 
           {/* Make Selection */}
           <div className="mb-6">
-            <Label className="text-lg font-semibold">Make</Label>
+            <Label className="text-lg font-semibold text-secondary-color">Make</Label>
             <div className="relative mt-2">
               <Select
                 value={filters.make}
-                onValueChange={(value) => setFilters(prev => ({ ...prev, make: value, model: '' }))}
+                onValueChange={(value) => setFilters(prev => ({ ...prev, make: value, model: 'all' }))}
               >
                 <SelectTrigger className="w-full bg-white">
                   <SelectValue placeholder="All Makes" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Makes</SelectItem>
+                  <SelectItem value="all">All Makes</SelectItem>
                   {brands.map((brand) => (
                     <SelectItem key={brand.id} value={brand.name}>
                       {brand.name}
@@ -173,15 +181,15 @@ const CarFilter = ({ onFilterChange, initialFilters = {} }: CarFilterProps) => {
 
           {/* Model Selection */}
           <div className="mb-6">
-            <Label className="text-lg font-semibold">Model</Label>
+            <Label className="text-lg font-semibold text-secondary-color">Model</Label>
             <div className="relative mt-2">
               <Select
                 value={filters.model}
                 onValueChange={(value) => setFilters(prev => ({ ...prev, model: value }))}
-                disabled={!filters.make}
+                disabled={!filters.make || filters.make === 'all'}
               >
-                <SelectTrigger className={`w-full bg-white ${!filters.make ? 'bg-gray-100' : ''}`}>
-                  <SelectValue placeholder={filters.make ? 'All Models' : 'Select Make First'} />
+                <SelectTrigger className={`w-full bg-white ${(!filters.make || filters.make === 'all') ? 'bg-gray-100' : ''}`}>
+                  <SelectValue placeholder={(filters.make && filters.make !== 'all') ? 'All Models' : 'Select Make First'} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Models</SelectItem>
@@ -197,7 +205,7 @@ const CarFilter = ({ onFilterChange, initialFilters = {} }: CarFilterProps) => {
 
           {/* Year Range */}
           <div>
-            <h3 className="text-lg font-semibold mb-3">Year of Manufacture</h3>
+            <h3 className="text-lg font-semibold mb-3 text-secondary-color">Year of Manufacture</h3>
             <div className="grid grid-cols-2 gap-3">
               <Input
                 type="number"
@@ -218,7 +226,7 @@ const CarFilter = ({ onFilterChange, initialFilters = {} }: CarFilterProps) => {
 
           {/* Price Range Inputs */}
           <div>
-            <h3 className="text-lg font-semibold mb-3">Price & Currency</h3>
+            <h3 className="text-lg font-semibold mb-3 text-secondary-color">Price & Currency</h3>
             <div className="grid grid-cols-2 gap-3">
               <Input
                 type="number"
@@ -243,7 +251,7 @@ const CarFilter = ({ onFilterChange, initialFilters = {} }: CarFilterProps) => {
       <div className="flex flex-col sm:flex-row gap-3 pt-4">
         <Button 
           onClick={applyFilters}
-          className="w-full bg-black text-white hover:bg-gray-800"
+          className="w-full bg-primary-color text-primary-white hover:bg-primary-dark"
         >
           Search
         </Button>
