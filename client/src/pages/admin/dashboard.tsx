@@ -42,7 +42,6 @@ const AdminDashboardPage = () => {
   // Fetch sell inquiries
   const { data: inquiries = [] } = useQuery<SellInquiry[]>({
     queryKey: ['/api/admin/inquiries'],
-    headers: credentials,
     enabled: isAuthenticated,
   });
 
@@ -97,15 +96,15 @@ const AdminDashboardPage = () => {
   };
 
   // Count stats
-  const totalCars = cars.length;
-  const newCars = cars.filter(car => car.condition === 'new').length;
-  const usedCars = cars.filter(car => car.condition === 'used').length;
-  const sellRequests = inquiries.length;
+  const totalCars = Array.isArray(cars) ? cars.length : 0;
+  const newCars = Array.isArray(cars) ? cars.filter(car => car.condition === 'new').length : 0;
+  const usedCars = Array.isArray(cars) ? cars.filter(car => car.condition === 'used').length : 0;
+  const sellRequests = Array.isArray(inquiries) ? inquiries.length : 0;
 
   // Recent listings (last 3)
-  const recentListings = [...cars].sort((a, b) => 
-    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  ).slice(0, 3);
+  const recentListings = Array.isArray(cars) ? [...cars].sort((a, b) => 
+    new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
+  ).slice(0, 3) : [];
 
   if (!isAuthenticated) return null;
 
@@ -190,14 +189,14 @@ const AdminDashboardPage = () => {
                 
                 <div className="mb-4">
                   <Label className="block text-gray-medium font-medium mb-2">Status</Label>
-                  <Select 
+                  <select 
                     value={quickAddCar.condition}
-                    onValueChange={value => setQuickAddCar({...quickAddCar, condition: value})}
+                    onChange={e => setQuickAddCar({...quickAddCar, condition: e.target.value})}
                     className="w-full p-3 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
                   >
                     <option value="new">New</option>
                     <option value="used">Used</option>
-                  </Select>
+                  </select>
                 </div>
                 
                 <div className="mb-4">
@@ -268,7 +267,7 @@ const AdminDashboardPage = () => {
                             <div>
                               <div className="font-medium">{car.title}</div>
                               <div className="text-xs text-gray-medium">
-                                Added: {new Date(car.createdAt).toLocaleDateString()}
+                                Added: {car.createdAt ? new Date(car.createdAt).toLocaleDateString() : 'N/A'}
                               </div>
                             </div>
                           </div>
@@ -334,7 +333,7 @@ const AdminDashboardPage = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
-                    {inquiries.slice(0, 3).map(inquiry => (
+                    {Array.isArray(inquiries) ? inquiries.slice(0, 3).map((inquiry: SellInquiry) => (
                       <tr key={inquiry.id} className="hover:bg-gray-50">
                         <td className="px-6 py-4">
                           <div className="font-medium">{inquiry.fullName}</div>
@@ -346,17 +345,17 @@ const AdminDashboardPage = () => {
                         </td>
                         <td className="px-6 py-4 font-medium">{formatCurrency(inquiry.askingPrice)}</td>
                         <td className="px-6 py-4 text-gray-medium">
-                          {new Date(inquiry.createdAt).toLocaleDateString()}
+                          {inquiry.createdAt ? new Date(inquiry.createdAt).toLocaleDateString() : 'N/A'}
                         </td>
                         <td className="px-6 py-4">
                           <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                            inquiry.status === 'pending' 
+                            (inquiry.status || 'pending') === 'pending' 
                               ? 'bg-yellow-100 text-warning' 
-                              : inquiry.status === 'reviewed'
+                              : (inquiry.status || 'pending') === 'reviewed'
                                 ? 'bg-green-100 text-success'
                                 : 'bg-red-100 text-error'
                           }`}>
-                            {inquiry.status.charAt(0).toUpperCase() + inquiry.status.slice(1)}
+                            {(inquiry.status || 'pending').charAt(0).toUpperCase() + (inquiry.status || 'pending').slice(1)}
                           </span>
                         </td>
                         <td className="px-6 py-4 text-sm">
@@ -379,9 +378,9 @@ const AdminDashboardPage = () => {
                           </div>
                         </td>
                       </tr>
-                    ))}
+                    )) : null}
                     
-                    {inquiries.length === 0 && (
+                    {Array.isArray(inquiries) && inquiries.length === 0 && (
                       <tr>
                         <td colSpan={6} className="px-6 py-6 text-center text-gray-medium">
                           No sell requests found.

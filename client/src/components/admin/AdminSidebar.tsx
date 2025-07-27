@@ -44,7 +44,7 @@ const AdminSidebar = ({ activePage }: AdminSidebarProps) => {
   return (
     <div className="w-64 bg-dark text-white shadow-lg">
       <div className="p-4">
-        <div className="text-xl font-bold mb-8">AutoElite Admin</div>
+        <div className="text-xl font-bold mb-8">RJ Motorworld Admin</div>
         
         <nav>
           <ul className="space-y-2">

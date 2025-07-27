@@ -41,7 +41,7 @@ export const carFormSchema = z.object({
   vin: z.string().optional(),
   stockNumber: z.string().optional(),
   featured: z.boolean().default(false),
-  images: z.array(z.string()).min(1, { message: "At least one image is required" }),
+  images: z.array(z.string()).default([]),
   features: z.array(z.string()).optional(),
 });
 
