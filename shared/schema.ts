@@ -22,7 +22,7 @@ export const carModels = pgTable('car_models', {
   name: text('name').notNull(),
 });
 
-// Main car listings table
+// Main car listings table with extensive features
 export const cars = pgTable('cars', {
   id: serial('id').primaryKey(),
   title: text('title').notNull(),
@@ -44,6 +44,43 @@ export const cars = pgTable('cars', {
   featured: boolean('featured').default(false),
   images: json('images').$type<string[]>().default([]),
   features: json('features').$type<string[]>().default([]),
+  
+  // Engine specifications
+  engineSize: text('engine_size'), // e.g., "2.0L", "3.5L V6"
+  engineType: text('engine_type'), // e.g., "Turbo", "Hybrid", "Electric"
+  horsepower: integer('horsepower'),
+  torque: integer('torque'),
+  
+  // Safety and luxury features
+  safetyFeatures: json('safety_features').$type<string[]>().default([]),
+  luxuryFeatures: json('luxury_features').$type<string[]>().default([]),
+  
+  // Technical specifications
+  doors: integer('doors'),
+  seats: integer('seats'),
+  
+  // Vehicle history and condition
+  accidentHistory: accidentHistoryEnum('accident_history'),
+  serviceHistory: boolean('service_history').default(false),
+  ownerHistory: integer('owner_history'), // Number of previous owners
+  
+  // Market information
+  tags: json('tags').$type<string[]>().default([]), // ["Luxury", "Sports", "Family", etc.]
+  marketValue: integer('market_value'), // Estimated market value
+  priceNegotiable: boolean('price_negotiable').default(true),
+  
+  // Location and availability
+  location: text('location'),
+  availability: text('availability').default('available'), // available, sold, reserved
+  
+  // Warranty and financing
+  warrantyMonths: integer('warranty_months'),
+  financingAvailable: boolean('financing_available').default(false),
+  
+  // Administrative
+  registrationNumber: text('registration_number'),
+  insuranceDetails: text('insurance_details'),
+  
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
 });

@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { useAdmin } from "@/hooks/useAdmin";
+import { useAuth } from "@/contexts/AdminAuthContext";
 
 interface AdminSidebarProps {
   activePage: "dashboard" | "cars" | "inquiries" | "settings";
@@ -7,7 +7,7 @@ interface AdminSidebarProps {
 
 const AdminSidebar = ({ activePage }: AdminSidebarProps) => {
   const [, navigate] = useLocation();
-  const { logout } = useAdmin();
+  const { logout } = useAuth();
 
   const navItems = [
     {

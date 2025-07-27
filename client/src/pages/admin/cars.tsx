@@ -1,35 +1,35 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { useAdmin } from "@/hooks/useAdmin";
+import { useAuth } from "@/contexts/AdminAuthContext";
+import { useAuthenticatedQuery, useAuthenticatedMutation } from "@/lib/useAuthenticatedQuery";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import AdminHeader from "@/components/admin/AdminHeader";
 import ProtectedRoute from "@/components/admin/ProtectedRoute";
-import CarFormDialog from "@/components/admin/CarFormDialog";
+import EnhancedCarFormDialog from "@/components/admin/EnhancedCarFormDialog";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { apiRequest } from "@/lib/queryClient";
+import { makeAuthenticatedRequest } from "@/lib/auth";
 import { formatCurrency } from "@/lib/utils/formatters";
 import type { Car, CarBrand } from "@shared/schema";
 
 const AdminCarsPage = () => {
-  const { isAuthenticated } = useAdmin();
+  const { isAuthenticated, accessToken, refreshToken } = useAuth();
   const { toast } = useToast();
   
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCar, setSelectedCar] = useState<Car | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // Fetch cars
-  const { data: cars = [], isLoading, refetch } = useQuery<Car[]>({
-    queryKey: ['/api/cars'],
-    enabled: isAuthenticated,
-  });
+  // Fetch cars using authenticated query
+  const { data: cars = [], isLoading, refetch } = useAuthenticatedQuery<Car[]>(
+    ['/api/admin/cars'],
+    '/api/admin/cars'
+  );
 
-  // Fetch brands
-  const { data: brands = [] } = useQuery<CarBrand[]>({
-    queryKey: ['/api/brands'],
-    enabled: isAuthenticated,
-  });
+  // Fetch brands (public endpoint)
+  const { data: brands = [] } = useAuthenticatedQuery<CarBrand[]>(
+    ['/api/brands'],
+    '/api/brands'
+  );
 
   const handleAddNewCar = () => {
     setSelectedCar(null);
@@ -45,7 +45,12 @@ const AdminCarsPage = () => {
     if (window.confirm(`Are you sure you want to delete ${car.title}?`)) {
       setIsDeleting(true);
       try {
-        await apiRequest('DELETE', `/api/admin/cars/${car.id}`);
+        await makeAuthenticatedRequest(
+          'DELETE', 
+          `/api/admin/cars/${car.id}`,
+          null,
+          { accessToken: accessToken!, refreshToken }
+        );
         toast({
           title: "Success",
           description: "Car deleted successfully.",
@@ -185,11 +190,12 @@ const AdminCarsPage = () => {
           </div>
         </div>
         
-        <CarFormDialog
+        <EnhancedCarFormDialog
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           car={selectedCar}
           brands={brands}
+          onSuccess={() => refetch()}
         />
       </div>
     </ProtectedRoute>

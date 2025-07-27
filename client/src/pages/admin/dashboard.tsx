@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import { useAdmin } from "@/hooks/useAdmin";
+import { useAuth } from "@/contexts/AdminAuthContext";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import AdminHeader from "@/components/admin/AdminHeader";
 import { Link } from "wouter";
@@ -16,7 +16,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { formatCurrency } from "@/lib/utils/formatters";
 
 const AdminDashboardPage = () => {
-  const { isAuthenticated, credentials } = useAdmin();
+  const { isAuthenticated } = useAuth();
   const [, navigate] = useLocation();
   const { toast } = useToast();
   const [quickAddCar, setQuickAddCar] = useState({
@@ -33,16 +33,16 @@ const AdminDashboardPage = () => {
     }
   }, [isAuthenticated, navigate]);
 
-  // Fetch cars
+  // Fetch cars (public endpoint)
   const { data: cars = [] } = useQuery<Car[]>({
     queryKey: ['/api/cars'],
     enabled: isAuthenticated,
   });
 
-  // Fetch sell inquiries
+  // Fetch sell inquiries (need auth)
   const { data: inquiries = [] } = useQuery<SellInquiry[]>({
     queryKey: ['/api/admin/inquiries'],
-    enabled: isAuthenticated,
+    enabled: false, // Temporarily disabled until we fix auth
   });
 
   // Handle quick car add

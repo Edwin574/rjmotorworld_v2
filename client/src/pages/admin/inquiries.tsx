@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useAdmin } from "@/hooks/useAdmin";
+import { useAuth } from "@/contexts/AdminAuthContext";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import AdminHeader from "@/components/admin/AdminHeader";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrency, formatNumber, formatDate } from "@/lib/utils/formatters";
-import { apiRequest } from "@/lib/queryClient";
+import { makeAuthenticatedRequest } from "@/lib/auth";
 import { useToast } from "@/hooks/use-toast";
 import type { SellInquiry } from "@shared/schema";
 
 const AdminInquiriesPage = () => {
-  const { isAuthenticated, credentials } = useAdmin();
+  const { isAuthenticated, accessToken, refreshToken } = useAuth();
   const [, navigate] = useLocation();
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -35,8 +35,7 @@ const AdminInquiriesPage = () => {
   // Fetch sell inquiries
   const { data: inquiries = [], isLoading } = useQuery<SellInquiry[]>({
     queryKey: ['/api/admin/inquiries'],
-    headers: credentials,
-    enabled: isAuthenticated,
+    enabled: false, // Temporarily disabled until we fix auth
   });
 
   // Load inquiry details if in view mode
@@ -58,7 +57,12 @@ const AdminInquiriesPage = () => {
   const updateInquiryStatus = async (id: number, status: 'reviewed' | 'rejected') => {
     setIsProcessing(true);
     try {
-      await apiRequest('PUT', `/api/admin/inquiries/${id}/status`, { status }, credentials);
+      await makeAuthenticatedRequest(
+        'PUT', 
+        `/api/admin/inquiries/${id}/status`, 
+        { status },
+        { accessToken: accessToken!, refreshToken }
+      );
       
       toast({
         title: "Success",

@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import { useLocation } from "wouter";
-import { useAdmin } from "@/hooks/useAdmin";
+import { useAuth } from "@/contexts/AdminAuthContext";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { isAuthenticated } = useAdmin();
+  const { isAuthenticated } = useAuth();
   const [, navigate] = useLocation();
 
   useEffect(() => {

@@ -5,6 +5,20 @@ import { z } from "zod";
 import { insertCarSchema, insertSellInquirySchema } from "@shared/schema";
 import { uploadImage } from "./lib/imagekit";
 import { sendSellInquiryEmail } from "./lib/emailjs";
+import jwt from "jsonwebtoken";
+
+// JWT Secret
+const JWT_SECRET = process.env.JWT_SECRET || 'rj-motorworld-secret-key';
+const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'rj-motorworld-refresh-secret-key';
+
+// Extend Request interface to include user
+declare global {
+  namespace Express {
+    interface Request {
+      user?: any;
+    }
+  }
+}
 
 // Helper function to validate request body
 const validateBody = <T>(schema: z.ZodType<T>) => {
@@ -24,27 +38,89 @@ const validateBody = <T>(schema: z.ZodType<T>) => {
   };
 };
 
-// Authentication middleware
-const isAuthenticated = (req: Request, res: Response, next: Function) => {
-  const { username, password } = req.headers;
-  
-  if (!username || !password) {
-    return res.status(401).json({ message: "Authentication required" });
+// JWT Authentication middleware
+const authenticateToken = (req: Request, res: Response, next: Function) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
+
+  if (!token) {
+    return res.status(401).json({ message: "Access token required" });
   }
 
-  // Check against environment variables
-  const adminUsername = process.env.ADMIN_USERNAME || 'admin@example.com';
-  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
-
-  if (username === adminUsername && password === adminPassword) {
+  jwt.verify(token, JWT_SECRET, (err: any, user: any) => {
+    if (err) {
+      return res.status(403).json({ message: "Invalid or expired token" });
+    }
+    req.user = user;
     next();
-  } else {
-    res.status(401).json({ message: "Invalid credentials" });
-  }
+  });
+};
+
+// Generate tokens
+const generateTokens = (user: any) => {
+  const payload = { id: user.id, username: user.username, role: user.role };
+  
+  const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: '15m' });
+  const refreshToken = jwt.sign(payload, JWT_REFRESH_SECRET, { expiresIn: '7d' });
+  
+  return { accessToken, refreshToken };
 };
 
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
+
+  // Admin Authentication Routes
+  app.post("/api/admin/login", async (req, res) => {
+    try {
+      const { username, password } = req.body;
+      
+      // Check against environment variables
+      const adminUsername = process.env.ADMIN_USERNAME || 'admin@example.com';
+      const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+
+      if (username === adminUsername && password === adminPassword) {
+        const user = { id: 1, username, role: 'admin' };
+        const { accessToken, refreshToken } = generateTokens(user);
+        
+        res.json({
+          success: true,
+          user: { id: 1, username, role: 'admin' },
+          accessToken,
+          refreshToken
+        });
+      } else {
+        res.status(401).json({ success: false, message: "Invalid credentials" });
+      }
+    } catch (error) {
+      res.status(500).json({ success: false, message: "Server error" });
+    }
+  });
+
+  app.post("/api/admin/refresh", async (req, res) => {
+    try {
+      const { refreshToken } = req.body;
+      
+      if (!refreshToken) {
+        return res.status(401).json({ message: "Refresh token required" });
+      }
+
+      jwt.verify(refreshToken, JWT_REFRESH_SECRET, (err: any, user: any) => {
+        if (err) {
+          return res.status(403).json({ message: "Invalid refresh token" });
+        }
+        
+        const { accessToken, refreshToken: newRefreshToken } = generateTokens(user);
+        res.json({ accessToken, refreshToken: newRefreshToken });
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+
+  app.post("/api/admin/logout", authenticateToken, async (req, res) => {
+    // In a real app, you'd blacklist the token
+    res.json({ message: "Logged out successfully" });
+  });
 
   // Public routes
   // Get car brands
@@ -144,7 +220,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Admin routes (protected)
   // Upload image to ImageKit
-  app.post("/api/admin/upload", isAuthenticated, async (req, res) => {
+  app.post("/api/admin/upload", authenticateToken, async (req, res) => {
     try {
       if (!req.body.image) {
         return res.status(400).json({ message: "No image provided" });
@@ -158,7 +234,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Create a new car
-  app.post("/api/admin/cars", isAuthenticated, validateBody(insertCarSchema), async (req, res) => {
+  app.post("/api/admin/cars", authenticateToken, validateBody(insertCarSchema), async (req, res) => {
     try {
       const car = await storage.createCar(req.body);
       res.status(201).json(car);
@@ -168,7 +244,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Update a car
-  app.put("/api/admin/cars/:id", isAuthenticated, async (req, res) => {
+  app.put("/api/admin/cars/:id", authenticateToken, async (req, res) => {
     try {
       const id = Number(req.params.id);
       if (isNaN(id)) {
@@ -187,7 +263,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Delete a car
-  app.delete("/api/admin/cars/:id", isAuthenticated, async (req, res) => {
+  app.delete("/api/admin/cars/:id", authenticateToken, async (req, res) => {
     try {
       const id = Number(req.params.id);
       if (isNaN(id)) {
@@ -206,7 +282,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get all sell inquiries
-  app.get("/api/admin/inquiries", isAuthenticated, async (req, res) => {
+  app.get("/api/admin/inquiries", authenticateToken, async (req, res) => {
     try {
       const inquiries = await storage.getSellInquiries();
       res.json(inquiries);
@@ -216,7 +292,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Update inquiry status
-  app.put("/api/admin/inquiries/:id/status", isAuthenticated, async (req, res) => {
+  app.put("/api/admin/inquiries/:id/status", authenticateToken, async (req, res) => {
     try {
       const id = Number(req.params.id);
       if (isNaN(id)) {
@@ -239,21 +315,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Check admin credentials
-  app.post("/api/admin/auth", async (req, res) => {
-    const { username, password } = req.body;
-    
-    // Check against environment variables
-    const adminUsername = process.env.ADMIN_USERNAME || 'admin@example.com';
-    const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
-
-    if (username === adminUsername && password === adminPassword) {
-      res.json({ authenticated: true });
-    } else {
-      res.status(401).json({ 
-        authenticated: false, 
-        message: "Invalid credentials" 
-      });
+  // Get all cars for admin (adding missing route)
+  app.get("/api/admin/cars", authenticateToken, async (req, res) => {
+    try {
+      const cars = await storage.getCars();
+      res.json(cars);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch cars" });
     }
   });
 

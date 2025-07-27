@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "wouter";
-import { useAdmin } from "@/hooks/useAdmin";
+import { useAuth } from "@/contexts/AdminAuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,7 +15,7 @@ const formSchema = loginSchema;
 type FormValues = z.infer<typeof formSchema>;
 
 const AdminLoginPage = () => {
-  const { login, isAuthenticated } = useAdmin();
+  const { login, isAuthenticated } = useAuth();
   const [, navigate] = useLocation();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
