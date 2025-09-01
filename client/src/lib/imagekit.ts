@@ -56,7 +56,7 @@ export const getOptimizedImageUrl = (
   height?: number, 
   quality: number = 80
 ): string => {
-  if (!url) return '';
+  if (!url) return 'https://images.unsplash.com/photo-1580273916550-e323be2ae537?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80';
   
   // If it's already an ImageKit URL, add transformations
   if (url.includes('ik.imagekit.io')) {
@@ -80,6 +80,11 @@ export const getOptimizedImageUrl = (
     return `${url}${url.includes('?') ? '&' : '?'}${params.toString()}`;
   }
   
-  // Return original URL for other sources
-  return url;
+  // Return original URL for other sources or fallback to placeholder
+  try {
+    new URL(url);
+    return url;
+  } catch {
+    return `https://images.unsplash.com/photo-1580273916550-e323be2ae537?ixlib=rb-4.0.3&auto=format&fit=crop&w=${width}&q=${quality}`;
+  }
 };

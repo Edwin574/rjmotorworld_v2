@@ -14,9 +14,12 @@ const ImageCarousel = ({ images, alt }: ImageCarouselProps) => {
     return (
       <div className="rounded-lg overflow-hidden">
         <img 
-          src="https://placehold.co/1200x800?text=No+Image+Available" 
+          src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
           alt="No image available" 
           className="w-full aspect-[4/3] object-cover"
+          onError={(e) => {
+            e.currentTarget.src = "https://placehold.co/1200x800/f3f4f6/6b7280?text=No+Image+Available";
+          }}
         />
       </div>
     );
@@ -30,6 +33,9 @@ const ImageCarousel = ({ images, alt }: ImageCarouselProps) => {
           src={getOptimizedImageUrl(images[activeImage], 1200, 800)}
           alt={`${alt} - Image ${activeImage + 1}`}
           className="w-full aspect-[4/3] object-cover"
+          onError={(e) => {
+            e.currentTarget.src = "https://images.unsplash.com/photo-1580273916550-e323be2ae537?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80";
+          }}
         />
       </div>
       
@@ -47,6 +53,9 @@ const ImageCarousel = ({ images, alt }: ImageCarouselProps) => {
               src={getOptimizedImageUrl(image, 150, 100)}
               alt={`${alt} thumbnail ${index + 1}`}
               className="w-24 h-16 object-cover"
+              onError={(e) => {
+                e.currentTarget.src = "https://images.unsplash.com/photo-1580273916550-e323be2ae537?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80";
+              }}
             />
           </div>
         ))}

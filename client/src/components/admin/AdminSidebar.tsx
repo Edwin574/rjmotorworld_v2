@@ -44,7 +44,14 @@ const AdminSidebar = ({ activePage }: AdminSidebarProps) => {
   return (
     <div className="w-64 text-white shadow-lg">
       <div className="p-4">
-        <div className="text-xl font-bold mb-8">RJ Motorworld Admin</div>
+        <div className="flex items-center mb-8">
+          <img 
+            src="/src/assets/logo.png" 
+            alt="RJ Motorworld Logo" 
+            className="w-8 h-8 mr-3"
+          />
+          <div className="text-xl font-bold">RJ Motorworld Admin</div>
+        </div>
 
         <nav>
           <ul className="space-y-2">

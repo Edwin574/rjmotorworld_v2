@@ -34,7 +34,14 @@ const BrandLogos = () => {
             {brands.map((brand) => (
               <Link key={brand.id} href={`/cars?make=${encodeURIComponent(brand.name)}`}>
                 <div className="flex items-center justify-center w-24 h-24 grayscale hover:grayscale-0 transition cursor-pointer">
-                  <img src={brand.logoUrl} alt={brand.name} className="h-16" />
+                  <img 
+                    src={brand.logoUrl} 
+                    alt={brand.name} 
+                    className="h-16"
+                    onError={(e) => {
+                      e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(brand.name)}&size=64&background=f3f4f6&color=374151`;
+                    }}
+                  />
                 </div>
               </Link>
             ))}
