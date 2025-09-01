@@ -14,25 +14,25 @@ const AdminSidebar = ({ activePage }: AdminSidebarProps) => {
       href: "/admin/dashboard",
       label: "Dashboard",
       icon: "tachometer-alt",
-      active: activePage === "dashboard"
+      active: activePage === "dashboard",
     },
     {
       href: "/admin/cars",
       label: "Car Listings",
       icon: "car",
-      active: activePage === "cars"
+      active: activePage === "cars",
     },
     {
       href: "/admin/inquiries",
       label: "Sell Requests",
       icon: "clipboard-list",
-      active: activePage === "inquiries"
+      active: activePage === "inquiries",
     },
     {
       href: "/admin/settings",
       label: "Settings",
       icon: "cog",
-      active: activePage === "settings"
+      active: activePage === "settings",
     },
   ];
 
@@ -42,20 +42,22 @@ const AdminSidebar = ({ activePage }: AdminSidebarProps) => {
   };
 
   return (
-    <div className="w-64 bg-dark text-white shadow-lg">
+    <div className="w-64 text-white shadow-lg">
       <div className="p-4">
         <div className="text-xl font-bold mb-8">RJ Motorworld Admin</div>
-        
+
         <nav>
           <ul className="space-y-2">
             {navItems.map((item) => (
               <li key={item.href}>
                 <Link href={item.href}>
-                  <a className={`flex items-center px-4 py-3 ${
-                    item.active
-                      ? 'bg-primary rounded-md'
-                      : 'hover:bg-gray-800 rounded-md'
-                  }`}>
+                  <a
+                    className={`flex items-center px-4 py-3 ${
+                      item.active
+                        ? "bg-primary rounded-md"
+                        : "hover:bg-gray-800 rounded-md"
+                    }`}
+                  >
                     <i className={`fas fa-${item.icon} w-5`}></i>
                     <span className="ml-3">{item.label}</span>
                   </a>
