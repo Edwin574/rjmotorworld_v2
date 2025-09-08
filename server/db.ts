@@ -13,25 +13,16 @@ let isMongoDBConnected = false;
 
 export async function connectToDatabase() {
   if (!MONGODB_URI) {
-    log('MONGODB_URI environment variable is not set. Using in-memory storage.', 'mongodb');
-    return false;
+    throw new Error('MONGODB_URI is not set. MongoDB is required.');
   }
 
-  try {
-    log('Connecting to MongoDB...', 'mongodb');
-    await mongoose.connect(MONGODB_URI, {
-      serverSelectionTimeoutMS: 5000, // Timeout after 5s of selection failure
-      connectTimeoutMS: 10000,       // Timeout after 10s of initial connection failure
-    });
-    
-    log('Connected to MongoDB database', 'mongodb');
-    isMongoDBConnected = true;
-    return true;
-  } catch (error) {
-    console.error('Failed to connect to MongoDB:', error);
-    log('Using in-memory storage fallback', 'mongodb');
-    return false;
-  }
+  log('Connecting to MongoDB...', 'mongodb');
+  await mongoose.connect(MONGODB_URI, {
+    serverSelectionTimeoutMS: 5000,
+    connectTimeoutMS: 10000,
+  });
+  log('Connected to MongoDB database', 'mongodb');
+  isMongoDBConnected = true;
 }
 
 // Handle connection events

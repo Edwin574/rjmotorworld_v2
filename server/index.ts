@@ -43,12 +43,8 @@ app.use((req, res, next) => {
 
 (async () => {
   try {
-    // Try to connect to MongoDB but don't crash if it fails
-    try {
-      await connectToDatabase();
-    } catch (dbError) {
-      console.warn("MongoDB connection failed, using in-memory storage:", dbError);
-    }
+    // Enforce MongoDB connection
+    await connectToDatabase();
     
     const server = await registerRoutes(app);
 

@@ -1,5 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/contexts/AdminAuthContext";
+import logo from "@/assets/logo.png";
 
 interface AdminSidebarProps {
   activePage: "dashboard" | "cars" | "inquiries" | "settings";
@@ -42,42 +43,42 @@ const AdminSidebar = ({ activePage }: AdminSidebarProps) => {
   };
 
   return (
-    <div className="w-64 text-white shadow-lg">
-      <div className="p-4">
+    <div className="w-64 bg-slate-900 text-slate-100 shadow-lg min-h-screen">
+      <div className="p-5">
         <div className="flex items-center mb-8">
-          <img 
-            src="/src/assets/logo.png" 
-            alt="RJ Motorworld Logo" 
-            className="w-8 h-8 mr-3"
+          <img
+            src={logo}
+            alt="RJ Motorworld Logo"
+            className="w-9 h-9 mr-3 rounded-sm shadow"
           />
-          <div className="text-xl font-bold">RJ Motorworld Admin</div>
+          <div className="text-lg font-semibold tracking-tight">RJ Motorworld Admin</div>
         </div>
 
         <nav>
-          <ul className="space-y-2">
+          <ul className="space-y-1">
             {navItems.map((item) => (
               <li key={item.href}>
                 <Link href={item.href}>
                   <a
-                    className={`flex items-center px-4 py-3 ${
+                    className={`flex items-center px-4 py-3 rounded-md transition-colors ${
                       item.active
-                        ? "bg-primary rounded-md"
-                        : "hover:bg-gray-800 rounded-md"
+                        ? "bg-primary text-white"
+                        : "text-slate-300 hover:text-white hover:bg-slate-800"
                     }`}
                   >
-                    <i className={`fas fa-${item.icon} w-5`}></i>
-                    <span className="ml-3">{item.label}</span>
+                    <i className={`fas fa-${item.icon} w-5 opacity-90`}></i>
+                    <span className="ml-3 text-sm font-medium">{item.label}</span>
                   </a>
                 </Link>
               </li>
             ))}
-            <li className="mt-8">
+            <li className="mt-6 pt-6 border-t border-slate-800">
               <button
                 onClick={handleLogout}
-                className="flex items-center px-4 py-3 w-full text-left text-red-300 hover:bg-gray-800 rounded-md"
+                className="flex items-center px-4 py-3 w-full text-left text-red-300 hover:text-white hover:bg-slate-800 rounded-md"
               >
                 <i className="fas fa-sign-out-alt w-5"></i>
-                <span className="ml-3">Logout</span>
+                <span className="ml-3 text-sm font-medium">Logout</span>
               </button>
             </li>
           </ul>

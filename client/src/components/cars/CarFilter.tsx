@@ -88,6 +88,25 @@ const CarFilter = ({ onFilterChange, initialFilters = {} }: CarFilterProps) => {
 
   return (
     <div className="bg-primary-white rounded-lg shadow-md p-6 space-y-6">
+      {/* Condition Filter moved above price */}
+      <div className="mb-2">
+        <Label className="text-lg font-semibold text-secondary-color">Condition</Label>
+        <div className="relative mt-2">
+          <Select
+            value={filters.condition}
+            onValueChange={(value) => setFilters(prev => ({ ...prev, condition: value }))}
+          >
+            <SelectTrigger className="w-full bg-white">
+              <SelectValue placeholder="All Conditions" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Conditions</SelectItem>
+              <SelectItem value="new">New</SelectItem>
+              <SelectItem value="used">Used</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
       {/* Search Input */}
       <div className="relative">
         <Input
@@ -136,25 +155,7 @@ const CarFilter = ({ onFilterChange, initialFilters = {} }: CarFilterProps) => {
 
       {showAdvanced && (
         <div className="space-y-4">
-          {/* Condition Filter */}
-          <div className="mb-6">
-            <Label className="text-lg font-semibold text-secondary-color">Condition</Label>
-            <div className="relative mt-2">
-              <Select
-                value={filters.condition}
-                onValueChange={(value) => setFilters(prev => ({ ...prev, condition: value }))}
-              >
-                <SelectTrigger className="w-full bg-white">
-                  <SelectValue placeholder="All Conditions" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Conditions</SelectItem>
-                  <SelectItem value="new">New</SelectItem>
-                  <SelectItem value="used">Used</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
+          {/* Make Selection */}
 
           {/* Make Selection */}
           <div className="mb-6">

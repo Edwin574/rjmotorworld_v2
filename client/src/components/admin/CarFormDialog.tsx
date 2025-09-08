@@ -94,7 +94,8 @@ const CarFormDialog = ({ isOpen, onClose, car, brands }: CarFormDialogProps) => 
         reader.readAsDataURL(file);
         
         // Upload to server/ImageKit
-        const imageUrl = await uploadImage(file, credentials || { username: '', password: '' });
+        const imageUrl = await uploadImage(file, credentials || undefined);
+        // Save only the ImageKit URL to the form state
         uploadedImageUrls.push(imageUrl);
       }
       
@@ -105,8 +106,8 @@ const CarFormDialog = ({ isOpen, onClose, car, brands }: CarFormDialogProps) => 
       });
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Failed to upload images.",
+        title: "Upload failed",
+        description: (error as any)?.message || "Failed to upload images. Ensure the image is JPG/PNG/WebP and under 5MB.",
         variant: "destructive"
       });
     } finally {
@@ -156,7 +157,13 @@ const CarFormDialog = ({ isOpen, onClose, car, brands }: CarFormDialogProps) => 
         });
       }
       
+      // Refresh public and admin car lists and the specific car detail
       queryClient.invalidateQueries({ queryKey: ['/api/cars'] });
+      queryClient.invalidateQueries({ queryKey: ['/api/cars/featured', { condition: 'new' }] });
+      queryClient.invalidateQueries({ queryKey: ['/api/cars/featured', { condition: 'used' }] });
+      if (car?.id) {
+        queryClient.invalidateQueries({ queryKey: [`/api/cars/${car.id}`] });
+      }
       onClose();
     } catch (error) {
       toast({

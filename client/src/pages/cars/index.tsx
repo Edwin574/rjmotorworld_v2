@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import type { Car } from "@shared/schema";
 
 const CarsPage = () => {
-  const [location] = useLocation();
+  const [location, navigate] = useLocation();
   const params = new URLSearchParams(location.split('?')[1]);
   
   // Get initial filter values from URL if any
@@ -48,6 +48,14 @@ const CarsPage = () => {
   // Handle filter changes
   const handleFilterChange = (newFilters: any) => {
     setFilters(newFilters);
+    // Sync filters to URL
+    const u = new URL('/cars', window.location.origin);
+    Object.entries(newFilters).forEach(([k, v]) => {
+      if (v !== undefined && v !== null && v !== '' && v !== 'all') {
+        u.searchParams.set(k, String(v));
+      }
+    });
+    navigate(u.pathname + (u.search ? u.search : ''));
   };
 
   // Sort cars based on selection

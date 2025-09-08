@@ -10,8 +10,8 @@ const Header = () => {
   const navigation = [
     { href: "/", label: "Home" },
     { href: "/cars", label: "Cars" },
-    { href: "/cars/new", label: "New" },
-    { href: "/cars/used", label: "Used" },
+    // { href: "/cars/new", label: "New" },
+    // { href: "/cars/used", label: "Used" },
     { href: "/sell", label: "Sell Your Car" },
     { href: "/about", label: "About Us" },
     { href: "/contact", label: "Contact" }

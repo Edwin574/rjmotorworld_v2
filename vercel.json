@@ -1,0 +1,11 @@
+{
+  "framework": null,
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist/public",
+  "rewrites": [
+    { "source": "/api/:match*", "destination": "/api/index" }
+  ],
+  "cleanUrls": true
+}
+
+

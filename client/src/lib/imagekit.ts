@@ -1,13 +1,12 @@
 // ImageKit configuration
-const IMAGEKIT_PUBLIC_KEY = import.meta.env.VITE_IMAGEKIT_PUBLIC_KEY || 'your_public_key';
-const IMAGEKIT_URL_ENDPOINT = import.meta.env.VITE_IMAGEKIT_URL_ENDPOINT || 'https://ik.imagekit.io/your_imagekit_id/';
-
+const IMAGEKIT_PUBLIC_KEY = import.meta.env.VITE_IMAGEKIT_PUBLIC_KEY ;
+const IMAGEKIT_URL_ENDPOINT = import.meta.env.VITE_IMAGEKIT_URL_ENDPOINT;
 /**
  * Uploads an image to ImageKit via the backend proxy
  * @param file The file to upload
  * @returns Promise resolving to the URL of the uploaded image
  */
-export const uploadImage = async (file: File, adminAuth: { username: string, password: string }): Promise<string> => {
+export const uploadImage = async (file: File, adminAuth?: { authorization?: string }): Promise<string> => {
   try {
     // Convert file to base64
     const base64 = await fileToBase64(file);
@@ -17,8 +16,7 @@ export const uploadImage = async (file: File, adminAuth: { username: string, pas
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'username': adminAuth.username,
-        'password': adminAuth.password
+        ...(adminAuth?.authorization ? { 'Authorization': adminAuth.authorization } : {})
       },
       body: JSON.stringify({ image: base64 })
     });
@@ -60,16 +58,23 @@ export const getOptimizedImageUrl = (
   
   // If it's already an ImageKit URL, add transformations
   if (url.includes('ik.imagekit.io')) {
-    const transformations = [];
-    transformations.push(`w-${width}`);
-    if (height) transformations.push(`h-${height}`);
-    transformations.push(`q-${quality}`);
-    
-    // Insert transformations into the URL
-    return url.replace(
-      'ik.imagekit.io/', 
-      `ik.imagekit.io/tr:${transformations.join(',')}/`
-    );
+    try {
+      const u = new URL(url);
+      const parts = u.pathname.split('/').filter(Boolean);
+      // Expect: /<endpoint-id>/<rest-of-path>
+      if (parts.length >= 2) {
+        const endpointId = parts[0];
+        const rest = parts.slice(1);
+        const tr: string[] = [`w-${width}`];
+        if (height) tr.push(`h-${height}`);
+        tr.push(`q-${quality}`);
+        u.pathname = `/${endpointId}/tr:${tr.join(',')}/${rest.join('/')}`;
+        return u.toString();
+      }
+      return url;
+    } catch {
+      return url;
+    }
   } else if (url.includes('unsplash.com')) {
     // Handle Unsplash URLs (for demo content)
     const params = new URLSearchParams();

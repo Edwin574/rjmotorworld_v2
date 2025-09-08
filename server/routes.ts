@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { z } from "zod";
 import { insertCarSchema, insertSellInquirySchema } from "@shared/schema";
+import { insertCarBrandSchema, insertCarModelSchema } from "@shared/schema";
 import { uploadImage } from "./lib/imagekit";
 import { sendSellInquiryEmail } from "./lib/emailjs";
 import jwt from "jsonwebtoken";
@@ -229,7 +230,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const imageUrl = await uploadImage(req.body.image);
       res.json({ url: imageUrl });
     } catch (error) {
-      res.status(500).json({ message: "Failed to upload image" });
+      const e: any = error || {};
+      const status = typeof e.status === 'number' ? e.status : 500;
+      const message = e.message || 'Failed to upload image';
+      const help = e.help;
+      res.status(status).json({ message, help });
     }
   });
 
@@ -240,6 +245,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(201).json(car);
     } catch (error) {
       res.status(500).json({ message: "Failed to create car" });
+    }
+  });
+
+  // Admin: Brands
+  app.get("/api/admin/brands", authenticateToken, async (_req, res) => {
+    try {
+      const brands = await storage.getCarBrands();
+      res.json(brands);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch brands" });
+    }
+  });
+
+  app.post("/api/admin/brands", authenticateToken, validateBody(insertCarBrandSchema), async (req, res) => {
+    try {
+      const brand = await storage.createCarBrand(req.body);
+      res.status(201).json(brand);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to create brand" });
+    }
+  });
+
+  // Admin: Models
+  app.get("/api/admin/models", authenticateToken, async (req, res) => {
+    try {
+      const brandId = req.query.brandId ? Number(req.query.brandId) : undefined;
+      const models = await storage.getCarModels(brandId);
+      res.json(models);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch models" });
+    }
+  });
+
+  app.post("/api/admin/models", authenticateToken, validateBody(insertCarModelSchema), async (req, res) => {
+    try {
+      const model = await storage.createCarModel(req.body);
+      res.status(201).json(model);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to create model" });
     }
   });
 
