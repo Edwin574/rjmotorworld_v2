@@ -2,7 +2,7 @@ import express, { type Request, Response, NextFunction } from "express";
 import cors from "cors";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
-import { connectToDatabase } from "./db";
+// Database connection handled by storage layer"
 import dotenv from "dotenv";
 
 // Load environment variables
@@ -61,9 +61,7 @@ app.use((req, res, next) => {
 
 (async () => {
   try {
-    // Enforce MongoDB connection
-    await connectToDatabase();
-    
+    // Database connection handled by PostgreSQL storage layer
     const server = await registerRoutes(app);
 
     app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
@@ -83,9 +81,9 @@ app.use((req, res, next) => {
       serveStatic(app);
     }
 
-    // Serve the app on port 3000 for local development
+    // Serve the app on port 5000 for Replit
     // this serves both the API and the client.
-    const port = process.env.PORT || 3000;
+    const port = process.env.PORT || 5000;
     server.listen({
       port,
       host: "0.0.0.0",
