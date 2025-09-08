@@ -1,6 +1,6 @@
 import { IStorage } from './storage';
-import { drizzle } from 'drizzle-orm/neon-serverless';
-import { Pool } from '@neondatabase/serverless';
+import { drizzle } from 'drizzle-orm/node-postgres';
+import { Pool } from 'pg';
 import { eq, and, gte, lte, or, ilike, desc } from 'drizzle-orm';
 import { 
   users, type User, type InsertUser,
@@ -19,7 +19,10 @@ export class PostgreSQLStorage implements IStorage {
       throw new Error('DATABASE_URL environment variable is required');
     }
     
-    this.pool = new Pool({ connectionString: process.env.DATABASE_URL });
+    this.pool = new Pool({ 
+      connectionString: process.env.DATABASE_URL,
+      ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+    });
     this.db = drizzle(this.pool);
     console.log('PostgreSQL storage initialized');
   }
@@ -120,7 +123,7 @@ export class PostgreSQLStorage implements IStorage {
         query = query.where(and(...conditions));
       }
 
-      const result = await query.orderBy(desc(cars.createdAt));
+      const result = await query.orderBy(desc(cars.createdAt)) as Car[];
       return result;
     } catch (error) {
       console.error('Error getting cars:', error);
@@ -254,7 +257,7 @@ export class PostgreSQLStorage implements IStorage {
         query = query.where(eq(carModels.brandId, brandId));
       }
       
-      const result = await query.orderBy(carModels.name);
+      const result = await query.orderBy(carModels.name) as CarModel[];
       return result;
     } catch (error) {
       console.error('Error getting car models:', error);
