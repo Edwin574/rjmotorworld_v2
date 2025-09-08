@@ -188,7 +188,7 @@ export class MemStorage implements IStorage {
         ]
       },
       {
-        title: "Mercedes-Benz EQS",
+        title: "Mercedes-Benz EQS1",
         make: "Mercedes-Benz",
         model: "EQS",
         year: 2023,
@@ -239,11 +239,11 @@ export class MemStorage implements IStorage {
         stockNumber: "BMW-530E-2020-001",
         featured: true,
         images: [
-          "https://images.unsplash.com/photo-1635048424329-a9bfb146d7aa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1702813541003-29472d6856f8?q=80&w=1035&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
           "https://images.unsplash.com/photo-1580273916550-e323be2ae537?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
           "https://images.unsplash.com/photo-1617654112808-106c1d614972?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
           "https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-          "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+          "https://images.unsplash.com/photo-1702813541003-29472d6856f8?q=80&w=1035&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
         ],
         features: [
           "iDrive 7.0",
@@ -272,7 +272,7 @@ export class MemStorage implements IStorage {
         stockNumber: "AUDI-Q5-2019-001",
         featured: false,
         images: [
-          "https://images.unsplash.com/photo-1619141522531-32525370eccd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://unsplash.com/photos/gray-mercedes-benz-coupe-on-black-asphalt-road-during-daytime-_4sWbzH5fp8",
           "https://images.unsplash.com/photo-1606611013875-4b5d4b5a3e85?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
           "https://images.unsplash.com/photo-1621937303719-44b6c8c8eb52?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
           "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
@@ -303,13 +303,13 @@ export class MemStorage implements IStorage {
         driveType: "Rear-Wheel Drive",
         vin: "WDB****9876543210",
         stockNumber: "MB-E-2020-001",
-        featured: true,
+        featured: false,
         images: [
-          "https://images.unsplash.com/photo-1606152456819-b5077544842f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-          "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-          "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-          "https://images.unsplash.com/photo-1560031607-99279bc29ced?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-          "https://images.unsplash.com/photo-1609521263047-f8f205293f24?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+          "https://images.unsplash.com/photo-1617814076367-b759c7d7e738?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1617814076367-b759c7d7e738?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1617814076367-b759c7d7e738?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1617814076367-b759c7d7e738?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          "https://images.unsplash.com/photo-1617814076367-b759c7d7e738?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
         ],
         features: [
           "MBUX Infotainment",

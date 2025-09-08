@@ -103,12 +103,3 @@ A fallback in-memory storage system is implemented when MongoDB connection fails
 
 Preferred communication style: Simple, everyday language.
 
-## Changelog
-
-Changelog:
-- July 02, 2025. Initial setup
-- January 27, 2025. Fixed dropdown functionality in multi-step selling form and advanced car filters
-  - Replaced HTML select elements with proper shadcn/ui Select components
-  - Fixed make, model, year, accident history, and contact time dropdowns
-  - Added condition filter to advanced search
-  - Improved form validation and user experience

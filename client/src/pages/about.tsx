@@ -15,13 +15,13 @@ const AboutPage = () => {
               Over the years, we've built a reputation for offering premium new and used vehicles that meet the highest standards of quality and performance. Our team of automotive experts carefully selects each vehicle in our inventory, ensuring that our customers drive away with not just a car, but complete confidence in their investment.
             </p>
             
-            <div className="my-8 rounded-lg overflow-hidden">
+            {/* <div className="my-8 rounded-lg overflow-hidden">
               <img 
-                src="https://images.unsplash.com/photo-1560527843-4456a986b7a1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
+                src="" 
                 alt="RJ Motorworld Dealership" 
                 className="w-full h-auto"
               />
-            </div>
+            </div> */}
             
             <h2 className="text-2xl font-bold mb-4 text-secondary-color">Our Values</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
