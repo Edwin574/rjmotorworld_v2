@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import serverless from "serverless-http";
-import { registerRoutes, connectToDatabase } from "../server/api";
+import { registerRoutes, connectToDatabase } from "../server/api.ts";
 
 let cachedHandler: any;
 
