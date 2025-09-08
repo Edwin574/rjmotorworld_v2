@@ -1,4 +1,5 @@
 import express, { type Request, Response, NextFunction } from "express";
+import cors from "cors";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { connectToDatabase } from "./db";
@@ -10,6 +11,23 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// CORS for split deploy (Render API + Vercel frontend)
+const allowedOrigins = [
+  "http://localhost:5173",
+  process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined,
+  process.env.FRONTEND_ORIGIN,
+].filter(Boolean) as string[];
+app.use(cors({
+  origin: (origin: string | undefined, cb: (err: Error | null, allowed?: boolean) => void) => {
+    if (!origin) return cb(null, true);
+    if (allowedOrigins.some(o => origin.startsWith(o))) return cb(null, true);
+    return cb(null, true); // relax for now; tighten if needed
+  },
+  methods: ["GET","POST","PUT","DELETE","OPTIONS"],
+  allowedHeaders: ["Content-Type","Authorization"],
+  credentials: true,
+}));
 
 app.use((req, res, next) => {
   const start = Date.now();

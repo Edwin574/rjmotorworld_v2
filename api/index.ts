@@ -1,3 +1,4 @@
+import 'tsconfig-paths/register';
 import express from "express";
 import dotenv from "dotenv";
 import serverless from "serverless-http";
