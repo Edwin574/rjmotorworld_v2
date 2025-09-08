@@ -1,10 +1,10 @@
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useState } from 'react';
-import connectToDatabase from '@/lib/mongodb';
-import { Car, CarBrand } from '@/models';
-import CarFilter from '@/components/cars/CarFilter';
-import CarCard from '@/components/cars/CarCard';
+import connectToDatabase from '../../lib/mongodb';
+import { Car, CarBrand } from '../../models';
+import CarFilter from '../../components/cars/CarFilter';
+import CarCard from '../../components/cars/CarCard';
 
 interface CarsPageProps {
   initialCars: any[];

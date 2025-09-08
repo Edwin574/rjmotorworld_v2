@@ -1,10 +1,10 @@
 import type { AppProps } from 'next/app';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState } from 'react';
-import { Toaster } from '@/components/ui/toaster';
-import { AuthProvider } from '@/contexts/AdminAuthContext';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
+import { Toaster } from '../components/ui/toaster';
+import { AuthProvider } from '../contexts/AdminAuthContext';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 import '../styles.css';
 
 export default function App({ Component, pageProps }: AppProps) {

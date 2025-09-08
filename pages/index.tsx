@@ -1,12 +1,12 @@
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
-import connectToDatabase from '@/lib/mongodb';
-import { Car, CarBrand } from '@/models';
-import Hero from '@/components/home/Hero';
-import SearchBar from '@/components/home/SearchBar';
-import FeaturedCars from '@/components/home/FeaturedCars';
-import BrandLogos from '@/components/home/BrandLogos';
-import SellCarCTA from '@/components/home/SellCarCTA';
+import connectToDatabase from '../lib/mongodb';
+import { Car, CarBrand } from '../models';
+import Hero from '../components/home/Hero';
+import SearchBar from '../components/home/SearchBar';
+import FeaturedCars from '../components/home/FeaturedCars';
+import BrandLogos from '../components/home/BrandLogos';
+import SellCarCTA from '../components/home/SellCarCTA';
 
 interface HomePageProps {
   featuredCars: any[];
