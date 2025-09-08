@@ -100,8 +100,8 @@ export const BUSINESS_HOURS = {
 // Contact information
 export const CONTACT_INFO = {
   address: "Mombasa Road, Nairobi, Kenya",
-  phone: "+254 700 123 456",
-  email: "info@rjmotorworld.co.ke"
+  phone: "+254 703 427327",
+  email: "rjmotordealers@gmail.com"
 };
 
 // Social media links
@@ -110,7 +110,7 @@ export const SOCIAL_MEDIA = {
   instagram: "https://instagram.com/rjmotorworld",
   twitter: "https://twitter.com/rjmotorworld",
   youtube: "https://youtube.com/rjmotorworld",
-  whatsapp: "+254 700 123 456"
+  whatsapp: "+254 703 427327"
 };
 
 // Theme colors for RJ Motorworld

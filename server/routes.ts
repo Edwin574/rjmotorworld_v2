@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import { z } from "zod";
 import { insertCarSchema, insertSellInquirySchema } from "@shared/schema";
 import { insertCarBrandSchema, insertCarModelSchema } from "@shared/schema";
+import { CarBrand as CarBrandModel, CarModel as CarModelModel } from "./models";
 import { uploadImage } from "./lib/imagekit";
 import { sendSellInquiryEmail } from "./lib/emailjs";
 import jwt from "jsonwebtoken";
@@ -284,6 +285,62 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(201).json(model);
     } catch (error) {
       res.status(500).json({ message: "Failed to create model" });
+    }
+  });
+
+  // Admin: Update/Delete brand
+  app.put("/api/admin/brands/:id", authenticateToken, async (req, res) => {
+    try {
+      const id = Number(req.params.id);
+      if (isNaN(id)) return res.status(400).json({ message: "Invalid brand ID" });
+      const update: any = {};
+      if (typeof req.body.name === 'string') update.name = req.body.name;
+      if (typeof req.body.logoUrl === 'string' || req.body.logoUrl === null) update.logoUrl = req.body.logoUrl;
+      const updated = await CarBrandModel.findOneAndUpdate({ id }, update, { new: true });
+      if (!updated) return res.status(404).json({ message: "Brand not found" });
+      res.json({ id: updated.id, name: updated.name, logoUrl: updated.logoUrl });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update brand" });
+    }
+  });
+
+  app.delete("/api/admin/brands/:id", authenticateToken, async (req, res) => {
+    try {
+      const id = Number(req.params.id);
+      if (isNaN(id)) return res.status(400).json({ message: "Invalid brand ID" });
+      const deleted = await CarBrandModel.findOneAndDelete({ id });
+      if (!deleted) return res.status(404).json({ message: "Brand not found" });
+      res.json({ message: "Brand deleted" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete brand" });
+    }
+  });
+
+  // Admin: Update/Delete model
+  app.put("/api/admin/models/:id", authenticateToken, async (req, res) => {
+    try {
+      const id = Number(req.params.id);
+      if (isNaN(id)) return res.status(400).json({ message: "Invalid model ID" });
+      const update: any = {};
+      if (typeof req.body.name === 'string') update.name = req.body.name;
+      if (typeof req.body.brandId === 'number') update.brandId = req.body.brandId;
+      const updated = await CarModelModel.findOneAndUpdate({ id }, update, { new: true });
+      if (!updated) return res.status(404).json({ message: "Model not found" });
+      res.json({ id: updated.id, name: updated.name, brandId: Number(updated.brandId) });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update model" });
+    }
+  });
+
+  app.delete("/api/admin/models/:id", authenticateToken, async (req, res) => {
+    try {
+      const id = Number(req.params.id);
+      if (isNaN(id)) return res.status(400).json({ message: "Invalid model ID" });
+      const deleted = await CarModelModel.findOneAndDelete({ id });
+      if (!deleted) return res.status(404).json({ message: "Model not found" });
+      res.json({ message: "Model deleted" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete model" });
     }
   });
 

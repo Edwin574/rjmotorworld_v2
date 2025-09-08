@@ -1,28 +1,27 @@
 import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/contexts/AdminAuthContext";
-import { useLocation } from "wouter";
+import AdminSidebar from "@/components/admin/AdminSidebar";
+import AdminHeader from "@/components/admin/AdminHeader";
+import ProtectedRoute from "@/components/admin/ProtectedRoute";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import type { CarBrand, CarModel } from "@shared/schema";
+import { useToast } from "@/hooks/use-toast";
 
 const AdminSettingsPage = () => {
   const { isAuthenticated, accessToken } = useAuth();
-  const [, navigate] = useLocation();
   const queryClient = useQueryClient();
+  const { toast } = useToast();
 
-  useEffect(() => {
-    if (!isAuthenticated) navigate("/admin");
-  }, [isAuthenticated, navigate]);
+  useEffect(() => {}, []);
 
   const { data: brands = [] } = useQuery<CarBrand[]>({
-    queryKey: ["/api/admin/brands"],
+    queryKey: ["/api/brands"],
     enabled: isAuthenticated,
     queryFn: async () => {
-      const res = await fetch("/api/admin/brands", {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
+      const res = await fetch("/api/brands");
       if (!res.ok) throw new Error("Failed to load brands");
       return res.json();
     },
@@ -32,48 +31,78 @@ const AdminSettingsPage = () => {
   const [brandLogo, setBrandLogo] = useState("");
   const [modelName, setModelName] = useState("");
   const [modelBrandId, setModelBrandId] = useState<number | "">("");
+  const [savingBrand, setSavingBrand] = useState(false);
+  const [savingModel, setSavingModel] = useState(false);
 
   const createBrand = async () => {
     if (!brandName.trim()) return;
-    const res = await fetch("/api/admin/brands", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify({ name: brandName.trim(), logoUrl: brandLogo || null }),
-    });
-    if (res.ok) {
+    try {
+      setSavingBrand(true);
+      const body: any = { name: brandName.trim() };
+      if (brandLogo.trim()) body.logoUrl = brandLogo.trim();
+
+      const res = await fetch("/api/admin/brands", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text || "Failed to create brand");
+      }
       setBrandName("");
       setBrandLogo("");
+      queryClient.invalidateQueries({ queryKey: ["/api/brands"] });
       queryClient.invalidateQueries({ queryKey: ["/api/admin/brands"] });
+      toast({ title: "Brand added", description: "The brand was created successfully." });
+    } catch (e: any) {
+      toast({ title: "Failed to add brand", description: e?.message || "Please try again.", variant: "destructive" });
+    } finally {
+      setSavingBrand(false);
     }
   };
 
   const createModel = async () => {
     if (!modelName.trim() || !modelBrandId) return;
-    const res = await fetch("/api/admin/models", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify({ name: modelName.trim(), brandId: Number(modelBrandId) }),
-    });
-    if (res.ok) {
+    try {
+      setSavingModel(true);
+      const res = await fetch("/api/admin/models", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({ name: modelName.trim(), brandId: Number(modelBrandId) }),
+      });
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text || "Failed to create model");
+      }
       setModelName("");
-      setModelBrandId("");
+      // keep selected brand to view newly added model
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/models", { brandId: Number(modelBrandId) }] });
+      queryClient.invalidateQueries({ queryKey: ["/api/models"] });
+      toast({ title: "Model added", description: "The model was created successfully." });
+    } catch (e: any) {
+      toast({ title: "Failed to add model", description: e?.message || "Please try again.", variant: "destructive" });
+    } finally {
+      setSavingModel(false);
     }
   };
 
   if (!isAuthenticated) return null;
 
   return (
-    <section className="py-10 bg-primary-white">
-      <div className="container mx-auto px-4">
-        <h1 className="text-3xl font-bold mb-8 text-secondary-color">Admin Settings</h1>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <ProtectedRoute>
+      <div className="flex min-h-screen bg-gray-100">
+        <AdminSidebar activePage="settings" />
+        <div className="flex-1 overflow-x-hidden">
+          <AdminHeader title="Settings" />
+          <div className="p-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div className="bg-white rounded-lg shadow p-6">
             <h2 className="text-xl font-semibold mb-4">Add Car Brand</h2>
             <div className="space-y-4">
@@ -85,7 +114,9 @@ const AdminSettingsPage = () => {
                 <Label>Logo URL (optional)</Label>
                 <Input value={brandLogo} onChange={(e) => setBrandLogo(e.target.value)} placeholder="https://..." />
               </div>
-              <Button onClick={createBrand} className="bg-primary">Save Brand</Button>
+              <Button onClick={createBrand} disabled={savingBrand} className="bg-primary">
+                {savingBrand ? 'Saving...' : 'Save Brand'}
+              </Button>
             </div>
 
             <h3 className="text-lg font-semibold mt-8 mb-2">Existing Brands</h3>
@@ -119,19 +150,23 @@ const AdminSettingsPage = () => {
                   ))}
                 </select>
               </div>
-              <Button onClick={createModel} className="bg-primary">Save Model</Button>
+              <Button onClick={createModel} disabled={savingModel} className="bg-primary">
+                {savingModel ? 'Saving...' : 'Save Model'}
+              </Button>
             </div>
 
             {modelBrandId && (
-              <>
+              <div>
                 <h3 className="text-lg font-semibold mt-8 mb-2">Models for {brands.find(b => b.id === modelBrandId as number)?.name}</h3>
                 <BrandModels brandId={modelBrandId as number} accessToken={accessToken || ''} />
-              </>
+              </div>
             )}
+            </div>
           </div>
         </div>
       </div>
-    </section>
+      </div>
+    </ProtectedRoute>
   );
 };
 

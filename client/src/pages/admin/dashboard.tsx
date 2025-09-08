@@ -11,12 +11,12 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import type { Car, SellInquiry } from "@shared/schema";
+import type { Car, SellInquiry, CarBrand, CarModel } from "@shared/schema";
 import { apiRequest } from "@/lib/queryClient";
 import { formatCurrency } from "@/lib/utils/formatters";
 
 const AdminDashboardPage = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, accessToken } = useAuth();
   const [, navigate] = useLocation();
   const { toast } = useToast();
   const [quickAddCar, setQuickAddCar] = useState({
@@ -39,10 +39,17 @@ const AdminDashboardPage = () => {
     enabled: isAuthenticated,
   });
 
-  // Fetch sell inquiries (need auth)
+  // Fetch sell inquiries (auth required)
   const { data: inquiries = [] } = useQuery<SellInquiry[]>({
     queryKey: ['/api/admin/inquiries'],
-    enabled: false, // Temporarily disabled until we fix auth
+    enabled: isAuthenticated && !!accessToken,
+    queryFn: async () => {
+      const res = await fetch('/api/admin/inquiries', {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      if (!res.ok) throw new Error('Failed to fetch inquiries');
+      return res.json();
+    },
   });
 
   // Handle quick car add
@@ -106,14 +113,40 @@ const AdminDashboardPage = () => {
     new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
   ).slice(0, 3) : [];
 
+  // Brands and models for dashboard table
+  const { data: brands = [] } = useQuery<CarBrand[]>({ queryKey: ["/api/brands"] });
+  const { data: allModels = [] } = useQuery<CarModel[]>({ queryKey: ["/api/models"] });
+
+  const updateBrand = async (id: number, name: string) => {
+    await fetch(`/api/admin/brands/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` },
+      body: JSON.stringify({ name })
+    });
+  };
+
+  const deleteBrand = async (id: number) => {
+    await fetch(`/api/admin/brands/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${accessToken}` } });
+  };
+
+  const updateModel = async (id: number, name: string) => {
+    await fetch(`/api/admin/models/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` },
+      body: JSON.stringify({ name })
+    });
+  };
+
+  const deleteModel = async (id: number) => {
+    await fetch(`/api/admin/models/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${accessToken}` } });
+  };
+
   if (!isAuthenticated) return null;
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      {/* Sidebar */}
       <AdminSidebar activePage="dashboard" />
       
-      {/* Main Content */}
       <div className="flex-1 overflow-x-hidden">
         <AdminHeader title="Dashboard" />
         
@@ -170,6 +203,8 @@ const AdminDashboardPage = () => {
             </div>
           </div>
           
+         
+
           {/* Recent Activity */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Quick Add Car Form */}
@@ -307,6 +342,63 @@ const AdminDashboardPage = () => {
                   </tbody>
                 </table>
               </div>
+            </div>
+          </div>
+           {/* Brands & Models Table */}
+           <div className="bg-white rounded-lg shadow p-6 lg:col-span-3 mb-8">
+            <h2 className="text-xl font-bold mb-4">Brands & Models</h2>
+            <div className="overflow-x-auto">
+              <table className="min-w-full text-sm">
+                <thead>
+                  <tr className="bg-gray-50">
+                    <th className="px-4 py-2 text-left">Brand</th>
+                    <th className="px-4 py-2 text-left">Models</th>
+                    <th className="px-4 py-2 text-left">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y">
+                  {brands.map((b) => (
+                    <tr key={b.id}>
+                      <td className="px-4 py-2">
+                        <div className="flex items-center gap-2">
+                          {b.logoUrl ? <img src={b.logoUrl} className="w-6 h-6 object-contain" /> : <div className="w-6 h-6 bg-gray-200" />}
+                          <input
+                            defaultValue={b.name}
+                            className="border rounded px-2 py-1"
+                            onBlur={(e) => updateBrand(b.id, e.target.value)}
+                          />
+                        </div>
+                      </td>
+                      <td className="px-4 py-2">
+                        <div className="flex flex-wrap gap-2">
+                          {allModels.filter(m => m.brandId === b.id).map(m => (
+                            <span key={m.id} className="inline-flex items-center gap-2 bg-gray-100 px-2 py-1 rounded">
+                              <input
+                                defaultValue={m.name}
+                                className="border rounded px-1 py-0.5"
+                                onBlur={(e) => updateModel(m.id, e.target.value)}
+                              />
+                              <button className="text-red-500" onClick={() => deleteModel(m.id)} title="Delete model">
+                                <i className="fas fa-times"></i>
+                              </button>
+                            </span>
+                          ))}
+                        </div>
+                      </td>
+                      <td className="px-4 py-2">
+                        <button className="text-red-600 hover:text-red-800" onClick={() => deleteBrand(b.id)} title="Delete brand">
+                          Delete Brand
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                  {brands.length === 0 && (
+                    <tr>
+                      <td className="px-4 py-6 text-gray-500" colSpan={3}>No brands yet.</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
             </div>
           </div>
           

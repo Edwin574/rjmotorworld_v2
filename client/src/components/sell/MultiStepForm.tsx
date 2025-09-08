@@ -66,10 +66,10 @@ const MultiStepForm = () => {
     }
   });
 
-  // Fetch car models when make is selected
+  // Legacy models fetch no longer required for free-typed model; kept disabled
   const { data: models = [] } = useQuery<CarModel[]>({
     queryKey: ['/api/models', form.watch('make')],
-    enabled: !!form.watch('make'),
+    enabled: false,
   });
 
   // Submit sell inquiry
@@ -83,6 +83,7 @@ const MultiStepForm = () => {
       toast({
         title: "Submission Successful",
         description: "Your car selling request has been submitted successfully.",
+        variant: undefined
       });
     },
     onError: (error) => {
@@ -237,18 +238,7 @@ const MultiStepForm = () => {
                     <FormItem>
                       <FormLabel className="block text-gray-medium font-medium mb-2">Make</FormLabel>
                       <FormControl>
-                        <Select value={field.value} onValueChange={field.onChange}>
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select Make" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {CAR_BRANDS.map((brand) => (
-                              <SelectItem key={brand.id} value={brand.name}>
-                                {brand.name}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
+                        <Input {...field} placeholder="e.g., Audi, Toyota" className="w-full p-3 border border-gray-300 rounded-md focus:ring-primary focus:border-primary" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -262,22 +252,7 @@ const MultiStepForm = () => {
                     <FormItem>
                       <FormLabel className="block text-gray-medium font-medium mb-2">Model</FormLabel>
                       <FormControl>
-                        <Select 
-                          value={field.value}
-                          onValueChange={field.onChange}
-                          disabled={!form.watch('make')}
-                        >
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder={form.watch('make') ? 'Select Model' : 'Select Make First'} />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {models.map((model) => (
-                              <SelectItem key={model.id} value={model.name}>
-                                {model.name}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
+                        <Input {...field} placeholder="e.g., A4, Camry, 3 Series" className="w-full p-3 border border-gray-300 rounded-md focus:ring-primary focus:border-primary" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -539,23 +514,20 @@ const MultiStepForm = () => {
                   render={({ field }) => (
                     <FormItem className="md:col-span-2">
                       <FormLabel className="block text-gray-medium font-medium mb-2">Preferred Contact Method</FormLabel>
-                      <div className="flex space-x-4">
-                        {CONTACT_METHODS.map((method) => (
-                          <FormItem key={method.value} className="flex items-center space-x-2">
-                            <FormControl>
-                              <RadioGroupItem 
-                                value={method.value} 
-                                id={`contactMethod-${method.value}`}
-                                checked={field.value === method.value}
-                                onClick={() => field.onChange(method.value)}
-                              />
-                            </FormControl>
-                            <FormLabel htmlFor={`contactMethod-${method.value}`} className="cursor-pointer">
-                              {method.label}
-                            </FormLabel>
-                          </FormItem>
-                        ))}
-                      </div>
+                      <FormControl>
+                        <RadioGroup value={field.value} onValueChange={field.onChange} className="flex space-x-4">
+                          {CONTACT_METHODS.map((method) => (
+                            <FormItem key={method.value} className="flex items-center space-x-2">
+                              <FormControl>
+                                <RadioGroupItem value={method.value} id={`contactMethod-${method.value}`} />
+                              </FormControl>
+                              <FormLabel htmlFor={`contactMethod-${method.value}`} className="cursor-pointer">
+                                {method.label}
+                              </FormLabel>
+                            </FormItem>
+                          ))}
+                        </RadioGroup>
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -597,7 +569,7 @@ const MultiStepForm = () => {
                 <Button 
                   type="submit"
                   disabled={submitMutation.isPending}
-                  className="bg-secondary text-white px-6 py-3 rounded-md font-medium hover:bg-orange-600 transition"
+                  className="bg-primary text-white px-6 py-3 rounded-md font-medium hover:bg-blue-700 transition"
                 >
                   {submitMutation.isPending ? (
                     <>

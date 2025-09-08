@@ -18,6 +18,7 @@ import AdminLoginPage from "@/pages/admin";
 import AdminDashboardPage from "@/pages/admin/dashboard";
 import AdminCarsPage from "@/pages/admin/cars";
 import AdminInquiriesPage from "@/pages/admin/inquiries";
+import AdminSettingsPage from "@/pages/admin/settings";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -37,6 +38,7 @@ function Router() {
       <Route path="/admin/dashboard" component={AdminDashboardPage} />
       <Route path="/admin/cars" component={AdminCarsPage} />
       <Route path="/admin/inquiries" component={AdminInquiriesPage} />
+      <Route path="/admin/settings" component={AdminSettingsPage} />
       
       {/* Fallback to 404 */}
       <Route component={NotFound} />

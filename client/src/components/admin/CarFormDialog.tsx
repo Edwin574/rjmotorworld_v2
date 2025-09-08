@@ -1,7 +1,8 @@
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -15,7 +16,7 @@ import { carFormSchema } from "@/lib/utils/validators";
 import { uploadImage } from "@/lib/imagekit";
 import { apiRequest } from "@/lib/queryClient";
 import { useAdmin } from "@/hooks/useAdmin";
-import type { Car, CarBrand } from "@shared/schema";
+import type { Car, CarBrand, CarModel } from "@shared/schema";
 import { z } from "zod";
 
 type FormValues = z.infer<typeof carFormSchema>;
@@ -27,10 +28,6 @@ interface CarFormDialogProps {
   brands: CarBrand[];
 }
 
-const MAKES = [
-  "Audi", "BMW", "Mercedes-Benz", "Toyota", "Honda", "Nissan", "Mazda",
-  "Volkswagen", "Ford", "Hyundai", "Kia", "Lexus", "Infiniti", "Acura"
-];
 
 const FUEL_TYPES = ["Petrol", "Diesel", "Hybrid", "Electric", "LPG"];
 const TRANSMISSIONS = ["Manual", "Automatic", "CVT"];
@@ -69,6 +66,15 @@ const CarFormDialog = ({ isOpen, onClose, car, brands }: CarFormDialogProps) => 
       images: car?.images || [],
       features: car?.features || []
     }
+  });
+
+  // Load brands and models
+  const { data: brands = [] } = useQuery<CarBrand[]>({ queryKey: ["/api/brands"] });
+  const selectedBrand = useMemo(() => brands.find(b => b.name === form.watch('make')), [brands, form.watch('make')]);
+  const selectedBrandId = selectedBrand?.id;
+  const { data: models = [] } = useQuery<CarModel[]>({
+    queryKey: ["/api/models", selectedBrandId],
+    enabled: !!selectedBrandId,
   });
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -232,15 +238,19 @@ const CarFormDialog = ({ isOpen, onClose, car, brands }: CarFormDialogProps) => 
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Make *</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={(val) => {
+                        field.onChange(val);
+                        // clear model when make changes
+                        form.setValue('model', '');
+                      }} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select make" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {MAKES.map((make) => (
-                            <SelectItem key={make} value={make}>{make}</SelectItem>
+                          {brands.map((brand) => (
+                            <SelectItem key={brand.id} value={brand.name}>{brand.name}</SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
@@ -255,9 +265,18 @@ const CarFormDialog = ({ isOpen, onClose, car, brands }: CarFormDialogProps) => 
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Model *</FormLabel>
-                      <FormControl>
-                        <Input {...field} placeholder="e.g., X5, Camry, 3 Series" />
-                      </FormControl>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger disabled={!selectedBrandId}>
+                            <SelectValue placeholder={selectedBrandId ? "Select model" : "Select make first"} />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {models.map((m) => (
+                            <SelectItem key={m.id} value={m.name}>{m.name}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
