@@ -6,7 +6,7 @@ import {
   carBrands, type CarBrand, type InsertCarBrand,
   carModels, type CarModel, type InsertCarModel
 } from "@shared/schema";
-import { MongoStorage } from "./storage-mongo";
+import { PostgreSQLStorage } from "./storage-pg";
 
 export interface IStorage {
   // User operations
@@ -619,4 +619,4 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MongoStorage();
+export const storage = new PostgreSQLStorage();
