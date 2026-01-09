@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "wouter";
+import { useRouter } from "next/router";
 import { useAuth } from "@/contexts/AdminAuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,7 +16,7 @@ type FormValues = z.infer<typeof formSchema>;
 
 const AdminLoginPage = () => {
   const { login, isAuthenticated } = useAuth();
-  const [, navigate] = useLocation();
+  const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -31,16 +31,16 @@ const AdminLoginPage = () => {
   // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
-      navigate("/admin/dashboard");
+      router.push("/admin/dashboard");
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, router]);
 
   const onSubmit = async (data: FormValues) => {
     setIsLoading(true);
     try {
       const success = await login(data.username, data.password);
       if (success) {
-        navigate("/admin/dashboard");
+        router.push("/admin/dashboard");
       } else {
         toast({
           title: "Authentication Failed",

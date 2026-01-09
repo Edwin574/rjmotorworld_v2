@@ -9,3 +9,5 @@ vite.config.ts.*
 .DS_Store
 .idea
 .relplit
+.env.local
+.next

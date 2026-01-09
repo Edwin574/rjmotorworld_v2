@@ -1,4 +1,4 @@
-import { Link } from "wouter";
+import Link from "next/link";
 import { Car } from "lucide-react";
 
 const SellCarCTA = () => {
@@ -12,10 +12,8 @@ const SellCarCTA = () => {
           <p className="text-xl mb-8 text-gray-three">
             Get a competitive offer for your vehicle in minutes. Our process is simple and hassle-free.
           </p>
-          <Link href="/sell">
-            <div className="inline-flex items-center bg-primary-color text-primary-white px-8 py-4 rounded-md font-medium hover:bg-primary-dark transition text-lg cursor-pointer">
-              Sell Your Car <Car className="ml-2 h-5 w-5" />
-            </div>
+          <Link href="/sell" className="inline-flex items-center bg-primary-color text-primary-white px-8 py-4 rounded-md font-medium hover:bg-primary-dark transition text-lg cursor-pointer">
+            Sell Your Car <Car className="ml-2 h-5 w-5" />
           </Link>
         </div>
       </div>

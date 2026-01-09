@@ -1,16 +1,16 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 
 interface User {
-  id: number;
+  id: string;
   username: string;
-  role: string;
+  isAdmin: boolean;
 }
 
 interface AuthContextType {
   user: User | null;
   accessToken: string | null;
   isAuthenticated: boolean;
-  login: (username: string, password: string) => Promise<boolean>;
+  login: (user: User, accessToken: string) => Promise<void>;
   logout: () => void;
   refreshToken: () => Promise<boolean>;
 }
@@ -26,8 +26,24 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [refreshTokenValue, setRefreshTokenValue] = useState<string | null>(null);
 
+  const logout = useCallback(() => {
+    setUser(null);
+    setAccessToken(null);
+    setRefreshTokenValue(null);
+    
+    // Only remove from localStorage on client side
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('rj-admin-access-token');
+      localStorage.removeItem('rj-admin-refresh-token');
+      localStorage.removeItem('rj-admin-user');
+    }
+  }, []);
+
   // Check if admin is already authenticated on component mount
   useEffect(() => {
+    // Only run on client side
+    if (typeof window === 'undefined') return;
+    
     const storedAccessToken = localStorage.getItem('rj-admin-access-token');
     const storedRefreshToken = localStorage.getItem('rj-admin-refresh-token');
     const storedUser = localStorage.getItem('rj-admin-user');
@@ -42,37 +58,16 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         logout();
       }
     }
-  }, []);
+  }, [logout]);
 
-  const login = async (username: string, password: string): Promise<boolean> => {
-    try {
-      const response = await fetch('/api/admin/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        setUser(data.user);
-        setAccessToken(data.accessToken);
-        setRefreshTokenValue(data.refreshToken);
-
-        // Store tokens and user info
-        localStorage.setItem('rj-admin-access-token', data.accessToken);
-        localStorage.setItem('rj-admin-refresh-token', data.refreshToken);
-        localStorage.setItem('rj-admin-user', JSON.stringify(data.user));
-
-        return true;
-      } else {
-        return false;
-      }
-    } catch (error) {
-      console.error('Login error:', error);
-      return false;
+  const login = async (user: User, accessToken: string): Promise<void> => {
+    setUser(user);
+    setAccessToken(accessToken);
+    
+    // Store tokens and user info (only on client side)
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('rj-admin-access-token', accessToken);
+      localStorage.setItem('rj-admin-user', JSON.stringify(user));
     }
   };
 
@@ -93,8 +88,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setAccessToken(data.accessToken);
       setRefreshTokenValue(data.refreshToken);
 
-      localStorage.setItem('rj-admin-access-token', data.accessToken);
-      localStorage.setItem('rj-admin-refresh-token', data.refreshToken);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('rj-admin-access-token', data.accessToken);
+        localStorage.setItem('rj-admin-refresh-token', data.refreshToken);
+      }
 
       return true;
     } catch (error) {
@@ -102,15 +99,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       logout();
       return false;
     }
-  };
-
-  const logout = () => {
-    setUser(null);
-    setAccessToken(null);
-    setRefreshTokenValue(null);
-    localStorage.removeItem('rj-admin-access-token');
-    localStorage.removeItem('rj-admin-refresh-token');
-    localStorage.removeItem('rj-admin-user');
   };
 
   const isAuthenticated = !!user && !!accessToken;

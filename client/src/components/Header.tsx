@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { Link, useLocation } from "wouter";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import { Menu, X } from "lucide-react";
 import logoImage from "@assets/logo.png";
 
 const Header = () => {
-  const [location] = useLocation();
+  const router = useRouter();
+  const location = router.asPath || "/";
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   const navigation = [

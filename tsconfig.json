@@ -4,7 +4,9 @@
     "shared/**/*",
     "server/**/*",
     "api/**/*",
-    "types/**/*"
+    "types/**/*",
+    "components/**/*",
+    "pages/**/*"
   ],
   "exclude": [
     "node_modules",
@@ -39,6 +41,10 @@
       ],
       "@shared/*": [
         "./shared/*"
+      ],
+      "@assets/*": [
+        "./attached_assets/*",
+        "./client/src/assets/*"
       ]
     },
     "target": "ES2017",

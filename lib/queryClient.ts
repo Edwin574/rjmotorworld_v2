@@ -1,6 +1,6 @@
 import { QueryClient, QueryFunction } from "@tanstack/react-query";
 
-const API_BASE = (import.meta as any)?.env?.VITE_API_BASE_URL || "";
+const API_BASE = ""; // Next.js uses relative URLs
 
 async function throwIfResNotOk(res: Response) {
   if (!res.ok) {

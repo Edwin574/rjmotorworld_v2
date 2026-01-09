@@ -1,4 +1,4 @@
-import { Link } from "wouter";
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { getOptimizedImageUrl } from "@/lib/imagekit";
 import { formatCurrency, formatCarSpecs } from "@/lib/utils/formatters";
@@ -46,7 +46,7 @@ const CarCard = ({ car }: CarCardProps) => {
       <div className="p-6">
         <h3 className="text-xl font-bold mb-2 text-secondary-color">{car.title}</h3>
         <p className="text-gray-one mb-4">
-          {formatCarSpecs(car.year, car.mileage || 0, car.fuelType, car.transmission)}
+          {formatCarSpecs(car.year, car.mileage || 0, car.fuelType || undefined, car.transmission || undefined)}
         </p>
         <div className="flex justify-between items-center">
           <div className="text-xl font-bold text-primary-color">{formatCurrency(car.price)}</div>

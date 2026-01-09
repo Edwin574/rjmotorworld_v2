@@ -1,5 +1,7 @@
-import { Link, useLocation } from "wouter";
-import { useAuth } from "@/contexts/AdminAuthContext";
+import Link from "next/link";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { useAuth } from "../../contexts/AdminAuthContext";
 import logo from "@/assets/logo.png";
 
 interface AdminSidebarProps {
@@ -7,7 +9,7 @@ interface AdminSidebarProps {
 }
 
 const AdminSidebar = ({ activePage }: AdminSidebarProps) => {
-  const [, navigate] = useLocation();
+  const router = useRouter();
   const { logout } = useAuth();
 
   const navItems = [
@@ -39,16 +41,18 @@ const AdminSidebar = ({ activePage }: AdminSidebarProps) => {
 
   const handleLogout = () => {
     logout();
-    navigate("/admin");
+    router.push("/admin");
   };
 
   return (
     <div className="w-64 bg-slate-900 text-slate-100 shadow-lg min-h-screen">
       <div className="p-5">
         <div className="flex items-center mb-8">
-          <img
+          <Image
             src={logo}
             alt="RJ Motorworld Logo"
+            width={36}
+            height={36}
             className="w-9 h-9 mr-3 rounded-sm shadow"
           />
           <div className="text-lg font-semibold tracking-tight">RJ Motorworld Admin</div>
@@ -58,17 +62,13 @@ const AdminSidebar = ({ activePage }: AdminSidebarProps) => {
           <ul className="space-y-1">
             {navItems.map((item) => (
               <li key={item.href}>
-                <Link href={item.href}>
-                  <a
-                    className={`flex items-center px-4 py-3 rounded-md transition-colors ${
+                <Link href={item.href} className={`flex items-center px-4 py-3 rounded-md transition-colors ${
                       item.active
                         ? "bg-primary text-white"
                         : "text-slate-300 hover:text-white hover:bg-slate-800"
-                    }`}
-                  >
-                    <i className={`fas fa-${item.icon} w-5 opacity-90`}></i>
-                    <span className="ml-3 text-sm font-medium">{item.label}</span>
-                  </a>
+                    }`}>
+                  <i className={`fas fa-${item.icon} w-5 opacity-90`}></i>
+                  <span className="ml-3 text-sm font-medium">{item.label}</span>
                 </Link>
               </li>
             ))}

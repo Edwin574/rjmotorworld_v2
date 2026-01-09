@@ -40,7 +40,7 @@ const CarDetailInfo = ({ car }: CarDetailInfoProps) => {
         </div>
         <div className="flex flex-col">
           <span className="text-gray-medium text-sm">Mileage</span>
-          <span className="font-semibold">{formatNumber(car.mileage)} miles</span>
+          <span className="font-semibold">{car.mileage ? formatNumber(car.mileage) : 'N/A'} miles</span>
         </div>
         <div className="flex flex-col">
           <span className="text-gray-medium text-sm">Fuel Type</span>

@@ -1,4 +1,4 @@
-import { Link } from "wouter";
+import Link from "next/link";
 import { BUSINESS_HOURS, CONTACT_INFO, SOCIAL_MEDIA } from "@/lib/constants";
 import { Facebook, Twitter, Instagram, Youtube, MapPin, Phone, Mail, Send } from "lucide-react";
 

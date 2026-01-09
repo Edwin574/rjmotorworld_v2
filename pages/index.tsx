@@ -23,7 +23,7 @@ export default function HomePage({ featuredCars, brands }: HomePageProps) {
       
       <Hero />
       <SearchBar />
-      <FeaturedCars cars={featuredCars} />
+      <FeaturedCars featuredCars={featuredCars} />
       <BrandLogos brands={brands} />
       <SellCarCTA />
     </>

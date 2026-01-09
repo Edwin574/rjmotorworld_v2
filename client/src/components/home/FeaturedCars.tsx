@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "wouter";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import CarCard from "@/components/cars/CarCard";
 import type { Car } from "@shared/schema";

@@ -1,4 +1,4 @@
-import { Link } from "wouter";
+import Link from "next/link";
 import { CURRENCY } from "@/lib/constants";
 import SearchBar from "./SearchBar";
 
@@ -35,15 +35,11 @@ const Hero = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link href="/cars/new">
-                <div className="bg-primary-white text-secondary-color px-6 py-3 rounded-md font-medium hover:bg-gray-three transition text-center cursor-pointer">
-                  New Cars
-                </div>
+              <Link href="/cars/new" className="bg-primary-white text-secondary-color px-6 py-3 rounded-md font-medium hover:bg-gray-three transition text-center cursor-pointer">
+                New Cars
               </Link>
-              <Link href="/cars/used">
-                <div className="bg-primary-color text-primary-white px-6 py-3 rounded-md font-medium hover:bg-primary-dark transition text-center cursor-pointer">
-                  Used Cars
-                </div>
+              <Link href="/cars/used" className="bg-primary-color text-primary-white px-6 py-3 rounded-md font-medium hover:bg-primary-dark transition text-center cursor-pointer">
+                Used Cars
               </Link>
             </div>
           </div>

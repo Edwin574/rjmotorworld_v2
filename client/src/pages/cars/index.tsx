@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation } from "wouter";
+import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
 import CarFilter from "@/components/cars/CarFilter";
 import CarCard from "@/components/cars/CarCard";
@@ -7,8 +7,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import type { Car } from "@shared/schema";
 
 const CarsPage = () => {
-  const [location, navigate] = useLocation();
-  const params = new URLSearchParams(location.split('?')[1]);
+  const router = useRouter();
+  const params = new URLSearchParams(router.asPath.split('?')[1]);
   
   // Get initial filter values from URL if any
   const initialFilters = {
@@ -55,7 +55,7 @@ const CarsPage = () => {
         u.searchParams.set(k, String(v));
       }
     });
-    navigate(u.pathname + (u.search ? u.search : ''));
+    router.push(u.pathname + (u.search ? u.search : ''));
   };
 
   // Sort cars based on selection

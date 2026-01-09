@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient, type UseQueryOptions, type UseMutationOptions } from '@tanstack/react-query';
-import { useAuth } from '@/contexts/AdminAuthContext';
+import { useAuth } from '../contexts/AdminAuthContext';
 
 interface AuthenticatedFetchOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE';

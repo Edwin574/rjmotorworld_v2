@@ -1,4 +1,5 @@
-import { Link, useLocation } from "wouter";
+import Link from "next/link";
+import { useRouter } from "next/router";
 import { useAuth } from "@/contexts/AdminAuthContext";
 import logo from "@/assets/logo.png";
 
@@ -7,7 +8,7 @@ interface AdminSidebarProps {
 }
 
 const AdminSidebar = ({ activePage }: AdminSidebarProps) => {
-  const [, navigate] = useLocation();
+  const router = useRouter();
   const { logout } = useAuth();
 
   const navItems = [
@@ -39,7 +40,7 @@ const AdminSidebar = ({ activePage }: AdminSidebarProps) => {
 
   const handleLogout = () => {
     logout();
-    navigate("/admin");
+    router.push("/admin");
   };
 
   return (

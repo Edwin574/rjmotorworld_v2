@@ -12,7 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/contexts/AdminAuthContext";
+import { useAuth } from "../../contexts/AdminAuthContext";
 import { makeAuthenticatedRequest } from "@/lib/auth";
 import type { Car, CarBrand, InsertCar } from "@shared/schema";
 

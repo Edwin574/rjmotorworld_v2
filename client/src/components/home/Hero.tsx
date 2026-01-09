@@ -1,4 +1,4 @@
-import { Link } from "wouter";
+import Link from "next/link";
 import { CURRENCY } from "@/lib/constants";
 import SearchBar from "./SearchBar";
 

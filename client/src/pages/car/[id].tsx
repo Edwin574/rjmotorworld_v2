@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { useParams, Link, useLocation } from "wouter";
+import { useRouter } from "next/router";
+import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import ImageCarousel from "@/components/car/ImageCarousel";
 import CarDetailInfo from "@/components/car/CarDetailInfo";
@@ -7,8 +8,8 @@ import CarCard from "@/components/cars/CarCard";
 import type { Car } from "@shared/schema";
 
 const CarDetailsPage = () => {
-  const { id } = useParams<{ id: string }>();
-  const [, setLocation] = useLocation();
+  const router = useRouter();
+  const { id } = router.query;
   
   // Fetch car details
   const { data: car, isLoading, isError } = useQuery<Car>({
@@ -24,10 +25,10 @@ const CarDetailsPage = () => {
   
   // Redirect if error or invalid ID
   useEffect(() => {
-    if (isError || (id && isNaN(parseInt(id)))) {
-      setLocation('/cars');
+    if (isError || (id && typeof id === 'string' && isNaN(parseInt(id)))) {
+      router.push('/cars');
     }
-  }, [isError, id, setLocation]);
+  }, [isError, id, router]);
 
   // Loading state
   if (isLoading) {
@@ -80,7 +81,7 @@ const CarDetailsPage = () => {
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-8">
             {/* Car Image Carousel */}
-            <ImageCarousel images={car.images} alt={car.title} />
+            <ImageCarousel images={car.images || []} alt={car.title} />
             
             {/* Car Details */}
             <CarDetailInfo car={car} />

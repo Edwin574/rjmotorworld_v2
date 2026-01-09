@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState, useCallback } from "react";
-import { useLocation } from "wouter";
+import { useRouter } from "next/router";
 import type { Car } from "@shared/schema";
 
 interface FilterParams {
@@ -28,8 +28,8 @@ interface UseCarsOptions {
 }
 
 export const useCars = (options: UseCarsOptions = {}) => {
-  const [location] = useLocation();
-  const urlParams = new URLSearchParams(location.split('?')[1]);
+  const router = useRouter();
+  const urlParams = new URLSearchParams(router.asPath.split('?')[1]);
   
   // Extract initial filters from URL params
   const urlFilters: FilterParams = {};
@@ -83,7 +83,7 @@ export const useCars = (options: UseCarsOptions = {}) => {
       case 'year':
         return (a.year - b.year) * multiplier;
       case 'mileage':
-        return (a.mileage - b.mileage) * multiplier;
+        return ((a.mileage || 0) - (b.mileage || 0)) * multiplier;
       default:
         return 0;
     }

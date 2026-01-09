@@ -45,7 +45,7 @@ export default function CarsPage({ initialCars, brands }: CarsPageProps) {
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="lg:w-1/4">
-            <CarFilter brands={brands} onFilter={handleFilter} />
+            <CarFilter onFilterChange={handleFilter} />
           </div>
           
           <div className="lg:w-3/4">
@@ -65,7 +65,7 @@ export default function CarsPage({ initialCars, brands }: CarsPageProps) {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {cars.map((car) => (
-                  <CarCard key={car._id} car={car} />
+                  <CarCard key={car.id} car={car} />
                 ))}
               </div>
             )}

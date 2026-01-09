@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "wouter";
+import { useRouter } from "next/router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/contexts/AdminAuthContext";
 import AdminSidebar from "@/components/admin/AdminSidebar";
@@ -14,12 +14,11 @@ import type { SellInquiry } from "@shared/schema";
 
 const AdminInquiriesPage = () => {
   const { isAuthenticated, accessToken, refreshToken } = useAuth();
-  const [, navigate] = useLocation();
+  const router = useRouter();
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const [location] = useLocation();
-  const queryParams = new URLSearchParams(location.split('?')[1]);
-  const viewId = queryParams.get('view');
+  const { view } = router.query;
+  const viewId = view as string;
   
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedInquiry, setSelectedInquiry] = useState<SellInquiry | null>(null);
@@ -28,9 +27,9 @@ const AdminInquiriesPage = () => {
   // Redirect if not authenticated
   useEffect(() => {
     if (!isAuthenticated) {
-      navigate("/admin");
+      router.push("/admin");
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, router]);
 
   // Fetch sell inquiries
   const { data: inquiries = [], isLoading } = useQuery<SellInquiry[]>({
@@ -146,10 +145,10 @@ const AdminInquiriesPage = () => {
                         </td>
                         <td className="px-6 py-4 font-medium">{formatCurrency(inquiry.askingPrice)}</td>
                         <td className="px-6 py-4 text-gray-medium">
-                          {formatDate(inquiry.createdAt)}
+                          {inquiry.createdAt ? formatDate(inquiry.createdAt) : 'N/A'}
                         </td>
                         <td className="px-6 py-4">
-                          {getStatusBadge(inquiry.status)}
+                          {getStatusBadge(inquiry.status || 'pending')}
                         </td>
                         <td className="px-6 py-4 text-sm">
                           <div className="flex space-x-3">
@@ -307,7 +306,7 @@ const AdminInquiriesPage = () => {
                 <h3 className="text-lg font-bold mb-2">Request Status</h3>
                 <div className="flex items-center space-x-2">
                   <div>Current Status:</div>
-                  <div>{getStatusBadge(selectedInquiry.status)}</div>
+                  <div>{getStatusBadge(selectedInquiry.status || 'pending')}</div>
                 </div>
               </div>
             </div>

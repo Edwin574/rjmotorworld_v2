@@ -52,9 +52,33 @@ type ApiRouteConfig = {
   handler satisfies PagesPageConfig
 }
 
+// Validate ../../pages/admin/cars.tsx
+{
+  const handler = {} as typeof import("../../pages/admin/cars.js")
+  handler satisfies PagesPageConfig
+}
+
+// Validate ../../pages/admin/dashboard.tsx
+{
+  const handler = {} as typeof import("../../pages/admin/dashboard.js")
+  handler satisfies PagesPageConfig
+}
+
 // Validate ../../pages/admin/index.tsx
 {
   const handler = {} as typeof import("../../pages/admin/index.js")
+  handler satisfies PagesPageConfig
+}
+
+// Validate ../../pages/admin/inquiries.tsx
+{
+  const handler = {} as typeof import("../../pages/admin/inquiries.js")
+  handler satisfies PagesPageConfig
+}
+
+// Validate ../../pages/admin/settings.tsx
+{
+  const handler = {} as typeof import("../../pages/admin/settings.js")
   handler satisfies PagesPageConfig
 }
 
@@ -127,6 +151,18 @@ type ApiRouteConfig = {
 // Validate ../../pages/api/cars/index.ts
 {
   const handler = {} as typeof import("../../pages/api/cars/index.js")
+  handler satisfies ApiRouteConfig
+}
+
+// Validate ../../pages/api/create-admin.ts
+{
+  const handler = {} as typeof import("../../pages/api/create-admin.js")
+  handler satisfies ApiRouteConfig
+}
+
+// Validate ../../pages/api/sell-inquiries.ts
+{
+  const handler = {} as typeof import("../../pages/api/sell-inquiries.js")
   handler satisfies ApiRouteConfig
 }
 

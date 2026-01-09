@@ -1,20 +1,20 @@
 import { ReactNode } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { useLocation } from "wouter";
+import { useRouter } from "next/router";
 
 interface MainLayoutProps {
   children: ReactNode;
 }
 
 const MainLayout = ({ children }: MainLayoutProps) => {
-  const [location] = useLocation();
+  const router = useRouter();
   
   // Check if current path is an admin route
-  const isAdminRoute = location.startsWith('/admin');
+  const isAdminRoute = router.asPath.startsWith('/admin');
   
   // For login page, only show the Header, for dashboard don't show header/footer
-  if (location === '/admin') {
+  if (router.asPath === '/admin') {
     return (
       <>
         <Header />

@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { useLocation } from "wouter";
+import { useRouter } from "next/router";
 import type { Car } from "@shared/schema";
 
 export const useCarDetails = (id: string | number) => {
-  const [, setLocation] = useLocation();
+  const router = useRouter();
   
   // Convert id to number
   const carId = typeof id === 'string' ? parseInt(id) : id;
@@ -33,9 +33,9 @@ export const useCarDetails = (id: string | number) => {
   // Redirect on error or invalid ID
   useEffect(() => {
     if ((isError || (typeof id === 'string' && isNaN(parseInt(id)))) && !isLoading) {
-      setLocation('/cars');
+      router.push('/cars');
     }
-  }, [isError, id, isLoading, setLocation]);
+  }, [isError, id, isLoading, router]);
   
   // Format WhatsApp inquiry message
   const getWhatsAppLink = (phone: string): string => {

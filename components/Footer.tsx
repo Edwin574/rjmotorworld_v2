@@ -1,4 +1,4 @@
-import { Link } from "wouter";
+import Link from "next/link";
 import { BUSINESS_HOURS, CONTACT_INFO, SOCIAL_MEDIA } from "@/lib/constants";
 import { Facebook, Twitter, Instagram, Youtube, MapPin, Phone, Mail, Send } from "lucide-react";
 
@@ -32,39 +32,25 @@ const Footer = () => {
             <h3 className="text-lg font-bold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/">
-                  <div className="text-gray-three hover:text-primary-accent cursor-pointer">Home</div>
-                </Link>
+                <Link href="/" className="text-gray-three hover:text-primary-accent cursor-pointer">Home</Link>
               </li>
               <li>
-                <Link href="/cars">
-                  <div className="text-gray-three hover:text-primary-accent cursor-pointer">Cars</div>
-                </Link>
+                <Link href="/cars" className="text-gray-three hover:text-primary-accent cursor-pointer">Cars</Link>
               </li>
               <li>
-                <Link href="/cars/new">
-                  <div className="text-gray-three hover:text-primary-accent cursor-pointer">New Cars</div>
-                </Link>
+                <Link href="/cars/new" className="text-gray-three hover:text-primary-accent cursor-pointer">New Cars</Link>
               </li>
               <li>
-                <Link href="/cars/used">
-                  <div className="text-gray-three hover:text-primary-accent cursor-pointer">Used Cars</div>
-                </Link>
+                <Link href="/cars/used" className="text-gray-three hover:text-primary-accent cursor-pointer">Used Cars</Link>
               </li>
               <li>
-                <Link href="/sell">
-                  <div className="text-gray-three hover:text-primary-accent cursor-pointer">Sell Your Car</div>
-                </Link>
+                <Link href="/sell" className="text-gray-three hover:text-primary-accent cursor-pointer">Sell Your Car</Link>
               </li>
               <li>
-                <Link href="/about">
-                  <div className="text-gray-three hover:text-primary-accent cursor-pointer">About Us</div>
-                </Link>
+                <Link href="/about" className="text-gray-three hover:text-primary-accent cursor-pointer">About Us</Link>
               </li>
               <li>
-                <Link href="/contact">
-                  <div className="text-gray-three hover:text-primary-accent cursor-pointer">Contact</div>
-                </Link>
+                <Link href="/contact" className="text-gray-three hover:text-primary-accent cursor-pointer">Contact</Link>
               </li>
             </ul>
           </div>

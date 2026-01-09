@@ -1,17 +1,17 @@
 
 import { useState } from "react";
-import { useLocation } from "wouter";
+import { useRouter } from "next/router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [, navigate] = useLocation();
+  const router = useRouter();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchTerm.trim()) {
-      navigate(`/cars?search=${encodeURIComponent(searchTerm.trim())}`);
+      router.push(`/cars?search=${encodeURIComponent(searchTerm.trim())}`);
     }
   };
 

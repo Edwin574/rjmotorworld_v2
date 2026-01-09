@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -35,6 +35,7 @@ const MultiStepForm = () => {
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [submissionComplete, setSubmissionComplete] = useState(false);
   const { toast } = useToast();
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   // Initialize the form with all steps' validation schemas
   const form = useForm<FormValues>({
@@ -129,38 +130,48 @@ const MultiStepForm = () => {
     }
   };
 
+  // Keep each step's content in view as the user progresses
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [step]);
+
   // Final form submission
   const onSubmit = (data: FormValues) => {
     submitMutation.mutate(data);
   };
 
   return (
-    <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
+    <div
+      ref={containerRef}
+      className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden"
+    >
       {/* Progress Steps */}
       <div className="flex border-b border-gray-200">
-        <div 
-          className={`flex-1 text-center py-4 font-medium ${
-            step === 1 
-              ? 'bg-primary text-white' 
-              : 'bg-gray-100 text-gray-medium'
+        <div
+          className={`flex-1 text-center py-4 font-medium border-b-2 ${
+            step === 1
+              ? 'bg-white text-gray-900 border-primary'
+              : 'bg-gray-100 text-gray-medium border-transparent'
           }`}
         >
-          1. Seller Information
+          1. Seller Type
         </div>
         <div 
-          className={`flex-1 text-center py-4 font-medium ${
+          className={`flex-1 text-center py-4 font-medium border-b-2 ${
             step === 2 
-              ? 'bg-primary text-white' 
-              : 'bg-gray-100 text-gray-medium'
+              ? 'bg-white text-gray-900 border-primary' 
+              : 'bg-gray-100 text-gray-medium border-transparent'
           }`}
         >
           2. Vehicle Details
         </div>
         <div 
-          className={`flex-1 text-center py-4 font-medium ${
+          className={`flex-1 text-center py-4 font-medium border-b-2 ${
             step === 3 
-              ? 'bg-primary text-white' 
-              : 'bg-gray-100 text-gray-medium'
+              ? 'bg-white text-gray-900 border-primary' 
+              : 'bg-gray-100 text-gray-medium border-transparent'
           }`}
         >
           3. Contact Details
@@ -178,8 +189,15 @@ const MultiStepForm = () => {
                 render={({ field }) => (
                   <FormItem className="mb-6">
                     <FormLabel className="block text-gray-medium font-medium mb-2">Seller Type</FormLabel>
-                    <RadioGroup 
-                      onValueChange={field.onChange} 
+                    <RadioGroup
+                      onValueChange={async (value) => {
+                        field.onChange(value);
+                        // Validate the seller type, then seamlessly advance to vehicle details
+                        await form.trigger("sellerType");
+                        if (!form.formState.errors.sellerType) {
+                          void goToNextStep();
+                        }
+                      }} 
                       value={field.value}
                       className="grid grid-cols-1 sm:grid-cols-3 gap-4"
                     >
@@ -201,15 +219,8 @@ const MultiStepForm = () => {
                 )}
               />
 
-              <div className="flex justify-end mt-8">
-                <Button 
-                  type="button" 
-                  onClick={goToNextStep}
-                  className="bg-primary text-white px-6 py-3 rounded-md font-medium hover:bg-blue-700 transition"
-                >
-                  Continue <i className="fas fa-arrow-right ml-2"></i>
-                </Button>
-              </div>
+              {/* The first step now advances automatically when a seller type is selected,
+                  so we no longer need an explicit "Continue" button here. */}
             </div>
           )}
 
@@ -408,10 +419,9 @@ const MultiStepForm = () => {
               
               <div className="flex justify-between mt-8">
                 <Button 
-                  type="button" 
-                  variant="outline"
+                  type="button"
                   onClick={goToPreviousStep}
-                  className="border border-gray-300 text-gray-medium px-6 py-3 rounded-md font-medium hover:bg-gray-50 transition"
+                  className="bg-primary text-white px-6 py-3 rounded-md font-medium hover:bg-blue-700 transition"
                 >
                   <i className="fas fa-arrow-left mr-2"></i> Back
                 </Button>
@@ -558,10 +568,9 @@ const MultiStepForm = () => {
               
               <div className="flex justify-between mt-8">
                 <Button 
-                  type="button" 
-                  variant="outline"
+                  type="button"
                   onClick={goToPreviousStep}
-                  className="border border-gray-300 text-gray-medium px-6 py-3 rounded-md font-medium hover:bg-gray-50 transition"
+                  className="bg-primary text-white px-6 py-3 rounded-md font-medium hover:bg-blue-700 transition disabled:opacity-70"
                   disabled={submitMutation.isPending}
                 >
                   <i className="fas fa-arrow-left mr-2"></i> Back

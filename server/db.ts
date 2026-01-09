@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import { log } from './vite';
 import { storage } from './storage';
 import { MemStorage } from './storage';
 
@@ -16,12 +15,12 @@ export async function connectToDatabase() {
     throw new Error('MONGODB_URI is not set. MongoDB is required.');
   }
 
-  log('Connecting to MongoDB...', 'mongodb');
+  console.log('Connecting to MongoDB...');
   await mongoose.connect(MONGODB_URI, {
     serverSelectionTimeoutMS: 5000,
     connectTimeoutMS: 10000,
   });
-  log('Connected to MongoDB database', 'mongodb');
+  console.log('Connected to MongoDB database');
   isMongoDBConnected = true;
 }
 

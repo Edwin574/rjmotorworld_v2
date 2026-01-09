@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "wouter";
+import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/contexts/AdminAuthContext";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import AdminHeader from "@/components/admin/AdminHeader";
-import { Link } from "wouter";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,7 +17,7 @@ import { formatCurrency } from "@/lib/utils/formatters";
 
 const AdminDashboardPage = () => {
   const { isAuthenticated, accessToken } = useAuth();
-  const [, navigate] = useLocation();
+  const router = useRouter();
   const { toast } = useToast();
   const [quickAddCar, setQuickAddCar] = useState({
     title: "",
@@ -29,9 +29,9 @@ const AdminDashboardPage = () => {
   // Redirect if not authenticated
   useEffect(() => {
     if (!isAuthenticated) {
-      navigate("/admin");
+      router.push("/admin");
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, router]);
 
   // Fetch cars (public endpoint)
   const { data: cars = [] } = useQuery<Car[]>({

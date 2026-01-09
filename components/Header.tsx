@@ -1,10 +1,13 @@
-import { useState } from "react";
-import { Link, useLocation } from "wouter";
+import React, { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { useRouter } from "next/router";
 import { Menu, X } from "lucide-react";
 import logoImage from "@assets/logo.png";
 
 const Header = () => {
-  const [location] = useLocation();
+  const router = useRouter();
+  const location = router.asPath || "/";
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   const navigation = [
@@ -26,28 +29,26 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center py-3">
           <div className="flex items-center">
-            <Link href="/">
-              <div className="flex items-center cursor-pointer">
-                <img 
-                  src={logoImage} 
-                  alt="RJ Motorworld" 
-                  className="h-12 w-auto" 
-                />
-              </div>
+            <Link href="/" className="flex items-center cursor-pointer">
+              <Image 
+                src={logoImage} 
+                alt="RJ Motorworld" 
+                width={48}
+                height={48}
+                className="h-12 w-auto" 
+              />
             </Link>
           </div>
           
           {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-8">
             {navigation.map((item) => (
-              <Link key={item.href} href={item.href}>
-                <div className={`font-medium cursor-pointer ${
+              <Link key={item.href} href={item.href} className={`font-medium cursor-pointer ${
                   location === item.href 
                     ? 'text-primary-color border-b-2 border-primary-accent' 
                     : 'text-gray-three hover:text-primary-color transition'
                 }`}>
-                  {item.label}
-                </div>
+                {item.label}
               </Link>
             ))}
           </nav>
@@ -69,17 +70,12 @@ const Header = () => {
           <div className="md:hidden pb-4">
             <nav className="flex flex-col space-y-4 pt-2 border-t border-secondary-light">
               {navigation.map((item) => (
-                <Link key={item.href} href={item.href}>
-                  <div 
-                    className={`font-medium cursor-pointer ${
+                <Link key={item.href} href={item.href} className={`font-medium cursor-pointer ${
                       location === item.href 
                         ? 'text-primary-color' 
                         : 'text-gray-three hover:text-primary-color transition'
-                    }`}
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {item.label}
-                  </div>
+                    }`} onClick={() => setMobileMenuOpen(false)}>
+                  {item.label}
                 </Link>
               ))}
             </nav>

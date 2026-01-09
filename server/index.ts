@@ -1,9 +1,9 @@
 import express, { type Request, Response, NextFunction } from "express";
 import cors from "cors";
 import { registerRoutes } from "./routes";
-import { setupVite, serveStatic, log } from "./vite";
 // Database connection handled by storage layer"
 import dotenv from "dotenv";
+import { connectToDatabase } from "./db";
 
 // Load environment variables
 dotenv.config();
@@ -52,7 +52,7 @@ app.use((req, res, next) => {
         logLine = logLine.slice(0, 79) + "…";
       }
 
-      log(logLine);
+      console.log(logLine);
     }
   });
 
@@ -61,7 +61,7 @@ app.use((req, res, next) => {
 
 (async () => {
   try {
-    // Database connection handled by PostgreSQL storage layer
+    await connectToDatabase();
     const server = await registerRoutes(app);
 
     app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
@@ -72,15 +72,6 @@ app.use((req, res, next) => {
       console.error(err);
     });
 
-    // importantly only setup vite in development and after
-    // setting up all the other routes so the catch-all route
-    // doesn't interfere with the other routes
-    if (app.get("env") === "development") {
-      await setupVite(app, server);
-    } else {
-      serveStatic(app);
-    }
-
     // Serve the app on port 5000 for Replit
     // this serves both the API and the client.
     const port = process.env.PORT || 5000;
@@ -88,7 +79,7 @@ app.use((req, res, next) => {
       port,
       host: "0.0.0.0",
     }, () => {
-      log(`serving on port ${port}`);
+      console.log(`serving on port ${port}`);
     });
   } catch (error) {
     console.error('Server initialization error:', error);

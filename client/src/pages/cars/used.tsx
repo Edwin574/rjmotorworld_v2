@@ -12,8 +12,7 @@ const UsedCarsPage = () => {
   const [sortBy, setSortBy] = useState('');
 
   // Prepare query parameters
-  const queryParams = { condition: 'used', ...filters };
-  delete queryParams.condition; // Already set in the base params
+  const queryParams = { ...filters };
 
   // Fetch used cars
   const { data: cars = [], isLoading } = useQuery<Car[]>({
@@ -35,7 +34,7 @@ const UsedCarsPage = () => {
       case 'newest':
         return b.year - a.year;
       case 'mileage':
-        return a.mileage - b.mileage;
+        return (a.mileage || 0) - (b.mileage || 0);
       default:
         return 0;
     }
@@ -67,7 +66,6 @@ const UsedCarsPage = () => {
                 <Select
                   value={sortBy}
                   onValueChange={setSortBy}
-                  className="p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
                 >
                   <option value="">Default</option>
                   <option value="price_asc">Price: Low to High</option>

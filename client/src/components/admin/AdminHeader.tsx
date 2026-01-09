@@ -1,4 +1,4 @@
-import { useAdmin } from "@/hooks/useAdmin";
+import { useAuth } from "@/contexts/AdminAuthContext";
 import { Button } from "@/components/ui/button";
 
 interface AdminHeaderProps {
@@ -6,10 +6,10 @@ interface AdminHeaderProps {
 }
 
 const AdminHeader = ({ title }: AdminHeaderProps) => {
-  const { credentials, logout } = useAdmin();
+  const { user, logout } = useAuth();
   
   // Extract username for display
-  const username = credentials?.username || "Admin";
+  const username = user?.username || "Admin";
   const displayName = username.split('@')[0];
   
   return (

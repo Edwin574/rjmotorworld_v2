@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { useLocation } from "wouter";
-import { useAuth } from "@/contexts/AdminAuthContext";
+import { useRouter } from "next/router";
+import { useAuth } from "../../contexts/AdminAuthContext";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -8,13 +8,13 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const { isAuthenticated } = useAuth();
-  const [, navigate] = useLocation();
+  const router = useRouter();
 
   useEffect(() => {
     if (!isAuthenticated) {
-      navigate("/admin");
+      router.push("/admin");
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, router]);
 
   if (!isAuthenticated) {
     return (

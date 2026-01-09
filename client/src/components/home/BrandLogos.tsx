@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "wouter";
+import Link from "next/link";
 import type { CarBrand } from "@shared/schema";
 
 const BrandLogos = () => {
@@ -35,7 +35,7 @@ const BrandLogos = () => {
               <Link key={brand.id} href={`/cars?make=${encodeURIComponent(brand.name)}`}>
                 <div className="flex items-center justify-center w-24 h-24 grayscale hover:grayscale-0 transition cursor-pointer">
                   <img 
-                    src={brand.logoUrl} 
+                    src={brand.logoUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(brand.name)}&size=64&background=f3f4f6&color=374151`} 
                     alt={brand.name} 
                     className="h-16"
                     onError={(e) => {

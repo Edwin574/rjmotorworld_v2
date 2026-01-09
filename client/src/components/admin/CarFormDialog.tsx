@@ -68,8 +68,7 @@ const CarFormDialog = ({ isOpen, onClose, car, brands }: CarFormDialogProps) => 
     }
   });
 
-  // Load brands and models
-  const { data: brands = [] } = useQuery<CarBrand[]>({ queryKey: ["/api/brands"] });
+  // Load models for the selected brand
   const selectedBrand = useMemo(() => brands.find(b => b.name === form.watch('make')), [brands, form.watch('make')]);
   const selectedBrandId = selectedBrand?.id;
   const { data: models = [] } = useQuery<CarModel[]>({
