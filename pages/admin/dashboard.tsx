@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../../contexts/AdminAuthContext";
 import AdminSidebar from "../../components/admin/AdminSidebar";
 import AdminHeader from "../../components/admin/AdminHeader";
@@ -20,6 +20,7 @@ const AdminDashboardPage = () => {
   const { isAuthenticated, accessToken } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   const [quickAddCar, setQuickAddCar] = useState({
     title: "",
     condition: "new",
@@ -35,13 +36,13 @@ const AdminDashboardPage = () => {
   }, [isAuthenticated, router]);
 
   // Fetch cars (public endpoint)
-  const { data: cars = [] } = useQuery<Car[]>({
+  const { data: cars = [], isLoading: carsLoading, error: carsError } = useQuery<Car[]>({
     queryKey: ['/api/cars'],
     enabled: isAuthenticated,
   });
 
   // Fetch sell inquiries (auth required)
-  const { data: inquiries = [] } = useQuery<SellInquiry[]>({
+  const { data: inquiries = [], isLoading: inquiriesLoading } = useQuery<SellInquiry[]>({
     queryKey: ['/api/sell-inquiries'],
     enabled: isAuthenticated,
   });
@@ -77,6 +78,9 @@ const AdminDashboardPage = () => {
           title: "Success",
           description: "Car added successfully!",
         });
+        
+        // Invalidate and refetch cars data
+        queryClient.invalidateQueries({ queryKey: ['/api/cars'] });
         
         setQuickAddCar({
           title: "",
@@ -284,51 +288,66 @@ const AdminDashboardPage = () => {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
-                      {recentListings.map(car => (
-                        <tr key={car.id} className="hover:bg-gray-50">
-                          <td className="px-4 py-3">
-                            <div className="flex items-center">
-                              <div className="h-10 w-16 rounded bg-gray-200 mr-3 flex-shrink-0 overflow-hidden">
-                                {car.images && car.images.length > 0 && (
-                                  <img 
-                                    src={car.images[0]} 
-                                    alt={car.title} 
-                                    className="h-full w-full object-cover"
-                                  />
-                                )}
-                              </div>
-                              <div>
-                                <div className="font-medium">{car.title}</div>
-                                <div className="text-xs text-gray-medium">
-                                  Added: {car.createdAt ? new Date(car.createdAt).toLocaleDateString() : 'N/A'}
-                                </div>
-                              </div>
-                            </div>
-                          </td>
-                          <td className="px-4 py-3">
-                            <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                              car.condition === 'new' 
-                                ? 'bg-blue-100 text-primary' 
-                                : 'bg-yellow-100 text-warning'
-                            }`}>
-                              {car.condition === 'new' ? 'New' : 'Used'}
-                            </span>
-                          </td>
-                          <td className="px-4 py-3 font-medium">{formatCurrency(car.price)}</td>
-                          <td className="px-4 py-3 text-sm">
-                            <div className="flex space-x-2">
-                              <Link href={`/admin/cars?edit=${car.id}`} className="text-primary hover:text-blue-700">
-                                <i className="fas fa-edit"></i>
-                              </Link>
-                              <button className="text-red-500 hover:text-red-700">
-                                <i className="fas fa-trash"></i>
-                              </button>
+                      {carsLoading ? (
+                        <tr>
+                          <td colSpan={4} className="px-4 py-6 text-center text-gray-medium">
+                            <div className="flex items-center justify-center">
+                              <i className="fas fa-spinner fa-spin mr-2"></i>
+                              Loading cars...
                             </div>
                           </td>
                         </tr>
-                      ))}
-                      
-                      {recentListings.length === 0 && (
+                      ) : carsError ? (
+                        <tr>
+                          <td colSpan={4} className="px-4 py-6 text-center text-red-500">
+                            Error loading cars. Please refresh the page.
+                          </td>
+                        </tr>
+                      ) : recentListings.length > 0 ? (
+                        recentListings.map(car => (
+                          <tr key={car.id} className="hover:bg-gray-50">
+                            <td className="px-4 py-3">
+                              <div className="flex items-center">
+                                <div className="h-10 w-16 rounded bg-gray-200 mr-3 flex-shrink-0 overflow-hidden">
+                                  {car.images && car.images.length > 0 && (
+                                    <img 
+                                      src={car.images[0]} 
+                                      alt={car.title} 
+                                      className="h-full w-full object-cover"
+                                    />
+                                  )}
+                                </div>
+                                <div>
+                                  <div className="font-medium">{car.title}</div>
+                                  <div className="text-xs text-gray-medium">
+                                    Added: {car.createdAt ? new Date(car.createdAt).toLocaleDateString() : 'N/A'}
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="px-4 py-3">
+                              <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                                car.condition === 'new' 
+                                  ? 'bg-blue-100 text-primary' 
+                                  : 'bg-yellow-100 text-warning'
+                              }`}>
+                                {car.condition === 'new' ? 'New' : 'Used'}
+                              </span>
+                            </td>
+                            <td className="px-4 py-3 font-medium">{formatCurrency(car.price)}</td>
+                            <td className="px-4 py-3 text-sm">
+                              <div className="flex space-x-2">
+                                <Link href={`/admin/cars?edit=${car.id}`} className="text-primary hover:text-blue-700">
+                                  <i className="fas fa-edit"></i>
+                                </Link>
+                                <button className="text-red-500 hover:text-red-700">
+                                  <i className="fas fa-trash"></i>
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
                         <tr>
                           <td colSpan={4} className="px-4 py-6 text-center text-gray-medium">
                             No car listings found. Add your first car!

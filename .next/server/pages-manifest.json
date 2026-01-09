@@ -2,8 +2,14 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/api/cars": "pages/api/cars.js",
+  "/": "pages/index.js",
+  "/admin": "pages/admin.js",
+  "/admin/dashboard": "pages/admin/dashboard.js",
+  "/api/admin/login": "pages/api/admin/login.js",
   "/sell": "pages/sell.js",
-  "/about": "pages/about.js",
-  "/cars": "pages/cars.js"
+  "/admin/inquiries": "pages/admin/inquiries.js",
+  "/admin/cars": "pages/admin/cars.js",
+  "/api/brands": "pages/api/brands.js",
+  "/api/cars": "pages/api/cars.js",
+  "/api/sell-inquiries": "pages/api/sell-inquiries.js"
 }

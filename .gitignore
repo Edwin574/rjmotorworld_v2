@@ -10,4 +10,5 @@ vite.config.ts.*
 .idea
 .relplit
 .env.local
+.config
 .next
